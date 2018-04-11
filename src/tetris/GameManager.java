@@ -2,11 +2,18 @@ package tetris;
 
 
 public class GameManager {
+    public enum KeyInput 
+        { LEFT, RIGHT, SOFTFALL, HARDFALL, ROTCLOCK, ROTCOUNTER, HOLD, PAUSE }
+    
     protected Board board;
     protected Scorecard scorecard;
-    protected NextBox nextBox;
+    protected NextQueue nextQueue;
     protected HoldBox holdBox;
-    protected int keyQueue;
+    protected KeyInput keyQueue;
+    
+    
+    
+    
     
     
 }
