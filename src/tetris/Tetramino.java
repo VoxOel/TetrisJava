@@ -70,22 +70,6 @@ class TetraI extends Tetramino {
 		initPos();
 		
 	}
-	
-        private void setNorth() {
-            
-        }
-        
-        private void setEast() {
-            
-        }
-        
-        private void setSouth() {
-            
-        }
-        
-        private void setWest() {
-            
-        }
         
 	private void initPos() {
 		chunkArray[0].setX(3);

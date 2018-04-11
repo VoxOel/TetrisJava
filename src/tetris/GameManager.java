@@ -3,7 +3,7 @@ package tetris;
 
 public class GameManager {
     public enum KeyInput 
-        { LEFT, RIGHT, SOFTFALL, HARDFALL, ROTCLOCK, ROTCOUNTER, HOLD, PAUSE }
+        { NULL, LEFT, RIGHT, SOFTFALL, HARDFALL, ROTCLOCK, ROTCOUNTER, HOLD, PAUSE }
     
     protected Board board;
     protected Scorecard scorecard;
@@ -14,6 +14,12 @@ public class GameManager {
     
     
     
-    
+    private void processKeyLatent()
+    {
+        switch(keyQueue)
+        {
+            case LEFT:
+        }
+    }
     
 }
