@@ -84,7 +84,8 @@ public class Chunk {
     
     public ImageIcon getImageIcon()
     {
-        ImageIcon ii = new ImageIcon(this.getClass().getResource(color));
+        ImageIcon ii = new ImageIcon(this.getClass().getResource("../textures/" + color + ".png"));
+        
         return ii;
     }
     

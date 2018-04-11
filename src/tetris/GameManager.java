@@ -2,6 +2,11 @@ package tetris;
 
 
 public class GameManager {
-    private Board board;
-    private 
+    protected Board board;
+    protected Scorecard scorecard;
+    protected NextBox nextBox;
+    protected HoldBox holdBox;
+    protected int keyQueue;
+    
+    
 }
