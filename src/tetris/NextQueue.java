@@ -11,17 +11,20 @@ public class NextQueue {
     
 	public NextQueue() {
             bag = new boolean[7];
-            for(boolean b : bag) {
-                b = true;
+            for(int i = 0; i < 7; i++)
+            {
+                bag[i] = true;
             }
             
             queue = new LinkedList<>();
-            for(int i = 0; i < 7; i++) {
+            for(int i = 0; i < 7; i++) 
+            {
                 queue.offer(grab());
             }
 	}
         
-        public char pullTetra() {
+        public char pullTetra() //returns next char in queue
+        {
             char ret;
             
             ret = queue.remove();
@@ -30,25 +33,33 @@ public class NextQueue {
             return ret;
         }
         
-        private char grab() {
+        private char grab()     //randomly generates char for Tetramino
+        {                       //based on Tetris generation rules
             boolean empty = true;
-            for(boolean b : bag) {
-                if(b) {
+            
+            for(boolean b : bag)    //checking to see if grab-bag is empty
+            {          
+                if(b)
+                {
                     empty = false;
                 }
             }
-            if(empty){
-                for(boolean b: bag) {
-                    b = true;
+            
+            if(empty)
+            {
+                for(int i = 0; i < 7; i++) //filling empty grab-bag
+                {       
+                    bag[i] = true;
                 }
             }
+            
             Random rand = new Random();
             
-            while(true) {
-                int something = rand.nextInt(7);
-                if(bag[something]) {
-                    bag[something] = false;
-                    switch(something) {
+            while(true) {                           //pulls from grab-bag, and sets value as pulled
+                int num = rand.nextInt(7);    //uses frequesncy array to represent grab-bag
+                if(bag[num]) {
+                    bag[num] = false;
+                    switch(num) {             //convert pull to Tetra char
                         case 0: return 'i';
                         case 1: return 'o';
                         case 2: return 't';
@@ -62,8 +73,5 @@ public class NextQueue {
             
             
         }
-	// shows next 6 tetraminos
-	// generate new pieces
-	// new piece cannot have more than 4 TOTAL 'S' or 'Z' pieces in a row
 
 }
