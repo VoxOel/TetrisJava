@@ -12,7 +12,12 @@ public class Chunk {
     
     public Chunk()
     {
-        show = false;
+        this(0,0,false,"grey");
+    }
+    
+    public Chunk(String c)
+    {
+        this(0,0,true,c);
     }
     
     public Chunk(int x, int y, boolean s, String c)
