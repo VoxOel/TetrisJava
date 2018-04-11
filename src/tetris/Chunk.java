@@ -17,6 +17,8 @@ public class Chunk {
     
     public Chunk(int x, int y, boolean s, String c)
     {
+        gridX = x;
+        gridY = y;
         show = s;
         color = c;
     }
@@ -50,14 +52,14 @@ public class Chunk {
         if( i > 9 || i < 0)
             return false;
         
-        x = i;
+        gridX = i;
         
         return true;
     }
     
     public int getX()
     {
-        return x;
+        return gridX;
     }
     
     public boolean setY(int i)
@@ -65,14 +67,14 @@ public class Chunk {
         if( i > 21 || i < 0)
             return false;
         
-        y = i;
+        gridY = i;
         
         return true;
     }
     
     public int getY()
     {
-        return y;
+        return gridY;
     }
     
     public ImageIcon getImageIcon()
