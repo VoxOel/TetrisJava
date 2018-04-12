@@ -59,6 +59,7 @@ public abstract class Tetramino {
 
 class TetraI extends Tetramino {
 
+    
 	public TetraI() {
 		super();
 		
@@ -70,6 +71,22 @@ class TetraI extends Tetramino {
 		
 	}
 	
+        private void setNorth() {
+            
+        }
+        
+        private void setEast() {
+            
+        }
+        
+        private void setSouth() {
+            
+        }
+        
+        private void setWest() {
+            
+        }
+        
 	private void initPos() {
 		chunkArray[0].setX(3);
 		chunkArray[0].setY(1);
