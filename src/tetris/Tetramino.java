@@ -4,29 +4,41 @@ public abstract class Tetramino {
 	
 	protected Chunk[] chunkArray;
 	protected char type;
+        protected int lowest;
 	
 	public Tetramino() {
 		chunkArray = new Chunk[4];
+                lowest = 99999;
 	}
 	
 	public abstract void rotateClockwise();
 	public abstract void rotateCounterClockwise();
 	
+        protected void checkLowest()
+        {
+            for(Chunk c : chunkArray)
+            {
+                if(c.getY() < lowest)
+                    lowest = c.getY();
+            }
+        }
+        
 	public void fall() {
-		for(Chunk c : chunkArray) {
-			c.setY(c.getY() - 1);
+		for(int i = 0; i < 4; i++) {
+			chunkArray[i].setY(chunkArray[i].getY() - 1);
 		}
+                checkLowest();
 	}
 	
 	public void left() {
-		for(Chunk c : chunkArray) {
-			c.setX(c.getX() - 1);
+		for(int i = 0; i < 4; i++) {
+			chunkArray[i].setX(chunkArray[i].getX() - 1);
 		}
 	}
 	
 	public void right() {
-		for(Chunk c : chunkArray) {
-			c.setX(c.getX() + 1);
+		for(int i = 0; i < 4; i++) {
+			chunkArray[i].setX(chunkArray[i].getX() + 1);
 		}
 	}
 	
@@ -70,22 +82,6 @@ class TetraI extends Tetramino {
 		initPos();
 		
 	}
-	
-        private void setNorth() {
-            
-        }
-        
-        private void setEast() {
-            
-        }
-        
-        private void setSouth() {
-            
-        }
-        
-        private void setWest() {
-            
-        }
         
 	private void initPos() {
 		chunkArray[0].setX(3);
