@@ -19,7 +19,7 @@ public abstract class Tetramino
     {
         chunkArray = new Chunk[4];
         lowest = 99999;
-        setType(c); // overridable method call?
+        setType(c); // overridable method call warning?
     }
      */
 
