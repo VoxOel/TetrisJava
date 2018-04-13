@@ -13,18 +13,12 @@ public abstract class Tetramino
         lowest = 99999;
     }
 
-    /*
-     * class is abstract... is there another way?
     public Tetramino(char c)
     {
         chunkArray = new Chunk[4];
         lowest = 99999;
-        setType(c); // overridable method call warning?
+        setType(c);
     }
-     */
-
-    public abstract void rotateClockwise();
-    public abstract void rotateCounterClockwise();
 
     protected void checkLowest()
     {
@@ -70,7 +64,7 @@ public abstract class Tetramino
         return type;
     }
 
-    public boolean setType(char c)
+    private boolean setType(char c)
     {
         switch(c)
         {
@@ -88,6 +82,9 @@ public abstract class Tetramino
                 return false;
         }
     }
+    
+    public abstract void rotateClockwise();
+    public abstract void rotateCounterClockwise();
 }
 
 class TetraI extends Tetramino

@@ -51,6 +51,7 @@ public class GameManager {
         }
         else
         {
+            // current playTetra object probably needs to be destroyed
             // initialize after performing a hold
             
             // playTetra = new Tetramino(c);
