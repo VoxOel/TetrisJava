@@ -14,6 +14,9 @@ public class GameManager {
     protected Tetramino ghostTetra;
     
     protected boolean leftHold, rightHold, softHold;
+    protected boolean hasHeld;  // keeps track if the player is able to hold
+                                // again or not; once a piece is locked in, set
+                                // this back to false
     
     public GameManager()
     {
@@ -29,6 +32,8 @@ public class GameManager {
         nextQueue = new NextQueue(op.showNext);
         holdBox = new HoldBox();
         
+        hasHeld = false;
+        
         while(!gameOver)
         {
             //game!
@@ -38,7 +43,21 @@ public class GameManager {
         
     }
     
-    public void initTetra(){}   //TODO
+    public void initTetra(char c)
+    {
+        if(c == '0')
+        {
+            // initialize from NextQueue (default operation)
+        }
+        else
+        {
+            // current playTetra object probably needs to be destroyed
+            // initialize after performing a hold
+            
+            // playTetra = new Tetramino(c);
+            // how do we do this?
+        }
+    }   //TODO
     
     protected Tetramino charToTetra(char c) throws Exception
     {
@@ -54,6 +73,19 @@ public class GameManager {
             default:
                 throw new Exception("Attempt to pass char into charToTetra: " + c);
         }
+    }
+    
+    protected boolean hold()
+    {
+        // sends playTetra type to HoldBox and recieves the type stored
+        if(!hasHeld)
+        {
+            initTetra(holdBox.swap(playTetra.getType()));
+            hasHeld = true;
+            return true;
+        }
+        
+        return false;
     }
     
     protected boolean left()
