@@ -125,8 +125,6 @@ public class Board extends JPanel {
                 }
             }
         }
-         
-        System.out.print("clearing chunks");
     }
     
     public boolean getChunkVisibility(int x, int y)
