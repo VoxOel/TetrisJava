@@ -6,12 +6,14 @@ public class GameOptions {
     public boolean ghostTetra;
     public PlacementType placement;
     public int showNext;
+    public boolean superRotation;
     
     public GameOptions()
     {
         ghostTetra = true;
         placement = PlacementType.EXTENDED;
         showNext = 6;
+        superRotation = false;
     }
     
 }

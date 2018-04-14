@@ -4,7 +4,8 @@ import java.awt.Image;
 import javax.swing.ImageIcon;
 
 public class Chunk {
-    private boolean show;
+    private boolean show;       //visibility on screen
+    private boolean placed;
     private String color;
     private int gridX;
     private int gridY;
@@ -20,12 +21,24 @@ public class Chunk {
         this(0,0,true,c);
     }
     
-    public Chunk(int x, int y, boolean s, String c)
+    public Chunk(int x, int y, boolean vis, String c)
     {
         gridX = x;
         gridY = y;
-        show = s;
+        show = vis;
+        placed = false;
         color = c;
+    }
+    
+    public boolean setPlaced(boolean b)
+    {
+        placed = b;
+        return true;
+    }
+    
+    public boolean getPlaced()
+    {
+        return placed;
     }
     
     public boolean setColor(String newColor)
