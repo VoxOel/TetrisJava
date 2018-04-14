@@ -3,8 +3,9 @@ package tetris;
 import java.util.LinkedList;
 import java.util.Random;
 import java.util.Queue;
+import javax.swing.JPanel;
 
-public class NextQueue {
+public class NextQueue extends JPanel{
 
     private boolean[] bag;
     private Queue<Character> queue;

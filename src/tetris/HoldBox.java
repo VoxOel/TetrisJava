@@ -1,6 +1,8 @@
 package tetris;
 
-public class HoldBox {
+import javax.swing.JPanel;
+
+public class HoldBox extends JPanel{
 	
     private char hold;
 

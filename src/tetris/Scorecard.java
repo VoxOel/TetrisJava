@@ -1,6 +1,8 @@
 package tetris;
 
-public class Scorecard {
+import javax.swing.JPanel;
+
+public class Scorecard extends JPanel{
 
 	private int score;
 	private int level;
