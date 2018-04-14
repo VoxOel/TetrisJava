@@ -26,6 +26,8 @@ public class GameManager extends JPanel implements KeyListener{
                                 // again or not; once a piece is locked in, set
                                 // this back to false
     
+    
+    
     public GameManager()
     {
         this(new GameOptions(), new KeyBinding());
@@ -106,6 +108,12 @@ public class GameManager extends JPanel implements KeyListener{
         try
         {
             playTetra = charToTetra(tetra);
+            if(op.ghostTetra)
+            {
+                ghostTetra = charToTetra(tetra);
+                initGhost();
+            }
+            
         }
         catch(Exception e)
         {
@@ -115,13 +123,46 @@ public class GameManager extends JPanel implements KeyListener{
         repaintTetra();
     }
     
+    protected void initGhost()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            ghostTetra.getChunkArray()[i].setColor(
+                    playTetra.getChunkArray()[i].getColor() + "Ghost");
+        }
+    }
+    
+    protected void placeGhost()
+    {
+        for(int i=0; i < 4; i++)
+        {
+            ghostTetra.getChunkArray()[i].setX(playTetra.getChunkArray()[i].getX());
+            ghostTetra.getChunkArray()[i].setY(playTetra.getChunkArray()[i].getY());
+        }
+        
+        while(down(ghostTetra)){}
+        
+    }
+    
     public void repaintTetra()
     {
         board.clearUnplacedChunks();
+        
+        if(op.ghostTetra)
+        {
+            placeGhost();
+
+            for(Chunk c : ghostTetra.getChunkArray())
+            {
+                board.setChunk(c.getX(), c.getY(), true, false, c.getColor());
+            }
+        }
+        
         for(Chunk c : playTetra.getChunkArray())
         {
             board.setChunk(c.getX(), c.getY(), true, false, c.getColor());
         }
+        
         board.repaint();
     }
     
@@ -179,13 +220,17 @@ public class GameManager extends JPanel implements KeyListener{
         }
         
         playTetra.up();
-        repaintTetra();
         return true;
     }
     
     protected boolean down()
     {
-        for(Chunk c : playTetra.getChunkArray())
+        return down(playTetra);
+    }
+    
+    protected boolean down(Tetramino tetra)
+    {
+        for(Chunk c : tetra.getChunkArray())
         {
             if(c.getY() <= 0)
                 return false;
@@ -194,8 +239,7 @@ public class GameManager extends JPanel implements KeyListener{
                 return false;
         }
         
-        playTetra.down();
-        repaintTetra();
+        tetra.down();
         return true;
     }
     
@@ -211,7 +255,6 @@ public class GameManager extends JPanel implements KeyListener{
         }
         
         playTetra.left();
-        repaintTetra();
         return true;
     }
     
@@ -227,7 +270,6 @@ public class GameManager extends JPanel implements KeyListener{
         }
         
         playTetra.right();
-        repaintTetra();
         return true;
     }
     
@@ -243,6 +285,24 @@ public class GameManager extends JPanel implements KeyListener{
         return true;
     }
     
+    protected int lineCheck()   //returns array of rows cleared
+    {
+        /* TODO: Finish this
+        for(int i = 0; i < board.getGridHeight(); i++)
+        {
+            int placedBlocks = 0;
+            for(int j = 0; j < board.getGridWidth(); j++)
+            {
+                
+            }     
+        }
+        */
+        
+        return 0;
+    }
+    
+    
+    
     public void processKey(int key)
     {
         /*
@@ -254,18 +314,22 @@ public class GameManager extends JPanel implements KeyListener{
         if(key == bind.left)
         {
             left();
+            repaintTetra();
         }
         else if(key == bind.right)
         {
             right();
+            repaintTetra();
         }
         else if(key == bind.softFall)
         {
             down();
+            repaintTetra();
         }
         else if(key == bind.hardFall)
         {
             up();
+            repaintTetra();
         }
         else if(key == bind.rotClock)
         {

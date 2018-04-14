@@ -12,7 +12,6 @@ public abstract class Tetramino
         chunkArray = new Chunk[4];
         lowest = 99999;
         setType(c);
-        System.out.println("constructing tetra of type: " + c);
     }
 
     protected void checkLowest()
