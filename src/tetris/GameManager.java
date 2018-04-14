@@ -100,19 +100,19 @@ public class GameManager extends JPanel implements KeyListener{
         if(tetra == '0')
         {
             // initialize from NextQueue (default operation)
-            // tetra = nextQueue.next() or whatever
+            tetra = nextQueue.pullTetra();
         }
         
         try
         {
-            playTetra = charToTetra(c);
+            playTetra = charToTetra(tetra);
         }
         catch(Exception e)
         {
             System.err.println(e.getMessage());
         }
         
-        
+        repaintTetra();
     }
     
     public void repaintTetra()
@@ -154,15 +154,32 @@ public class GameManager extends JPanel implements KeyListener{
         return false;
     }
     
+    //checks to see if the chunk is sold with x and y transform relative to c
+    protected boolean isSolidChunk(Chunk c, int xTransform, int yTransform)
+    {
+        boolean placed, vis;
+        placed = board.getChunkPlaced(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        vis = board.getChunkVisibility(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        
+        return placed && vis;
+    }
+    
     protected boolean up()
     {
+        boolean canMove;
         for(Chunk c : playTetra.getChunkArray())
         {
             if(c.getY() >= board.getGridHeight() - 1)
                 return false;
+            
+            if(isSolidChunk(c,0,1))
+                return false;
         }
         
         playTetra.up();
+        repaintTetra();
         return true;
     }
     
@@ -172,9 +189,13 @@ public class GameManager extends JPanel implements KeyListener{
         {
             if(c.getY() <= 0)
                 return false;
+            
+            if(isSolidChunk(c,0,-1))
+                return false;
         }
         
         playTetra.down();
+        repaintTetra();
         return true;
     }
     
@@ -184,9 +205,13 @@ public class GameManager extends JPanel implements KeyListener{
         {
             if(c.getX() <= 0)   //bounding box checks
                return false;
+            
+            if(isSolidChunk(c,-1,0))
+                return false;
         }
         
         playTetra.left();
+        repaintTetra();
         return true;
     }
     
@@ -196,9 +221,25 @@ public class GameManager extends JPanel implements KeyListener{
         {
             if(c.getX() >= board.getGridWidth()-1)  //bounding box checks
                return false;
+            
+            if(isSolidChunk(c,1,0))
+                return false;
         }
         
         playTetra.right();
+        repaintTetra();
+        return true;
+    }
+    
+    protected boolean lock()
+    {
+        for(Chunk c : playTetra.getChunkArray())
+        {
+            board.setChunk(c.getX(), c.getY(), true, true, c.getColor());
+        }
+        
+        initTetra();
+        
         return true;
     }
     
@@ -228,7 +269,7 @@ public class GameManager extends JPanel implements KeyListener{
         }
         else if(key == bind.rotClock)
         {
-            
+            lock();
         }
         else if(key == bind.rotCounter)
         {
@@ -243,8 +284,6 @@ public class GameManager extends JPanel implements KeyListener{
             gameOver = true;
         }
         
-        
-        repaintTetra();
         //debugInfo();
     }
 

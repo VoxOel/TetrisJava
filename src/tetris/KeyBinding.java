@@ -13,6 +13,7 @@ public class KeyBinding {
         right = KeyEvent.VK_RIGHT;
         softFall = KeyEvent.VK_DOWN;
         hardFall = KeyEvent.VK_UP;
+        rotClock = KeyEvent.VK_CONTROL;
         pause = KeyEvent.VK_ESCAPE; //temporary?
         
     }
