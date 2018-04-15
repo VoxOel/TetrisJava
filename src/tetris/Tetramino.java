@@ -108,7 +108,7 @@ class TetraI extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(3);  chunkArray[0].setY(20);
+        chunkArray[0].setX(3);  chunkArray[0].setY(20); 
         chunkArray[1].setX(4);  chunkArray[1].setY(20);
         chunkArray[2].setX(5);  chunkArray[2].setY(20);
         chunkArray[3].setX(6);  chunkArray[3].setY(20);
