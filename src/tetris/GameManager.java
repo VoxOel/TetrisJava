@@ -184,8 +184,8 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected boolean hold()
     {
-        // sends playTetra type to HoldBox and recieves the type stored
-        if(!hasHeld)
+        
+        if(!hasHeld) // sends playTetra type to HoldBox and recieves the type stored
         {
             initTetra(holdBox.swap(playTetra.getType()));
             hasHeld = true;
@@ -281,6 +281,7 @@ public class GameManager extends JPanel implements KeyListener{
         }
         
         initTetra();
+        hasHeld = false;
         
         return true;
     }
@@ -341,7 +342,7 @@ public class GameManager extends JPanel implements KeyListener{
         }
         else if(key == bind.hold)
         {
-            
+            hold();
         }
         else if(key == bind.pause)
         {
