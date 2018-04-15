@@ -1,11 +1,13 @@
 package tetris;
 
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import javax.swing.JPanel;
 
-public class GameManager {
-    public enum KeyInput 
-        { NULL, LEFT, RIGHT, SOFTFALL, HARDFALL, 
-        ROTCLOCK, ROTCOUNTER, HOLD, PAUSE }
-    
+
+public class GameManager extends JPanel implements KeyListener{
     protected Board board;
     protected Scorecard scorecard;
     protected NextQueue nextQueue;
@@ -13,19 +15,32 @@ public class GameManager {
     protected Tetramino playTetra;
     protected Tetramino ghostTetra;
     
-    protected boolean leftHold, rightHold, softHold;
+    protected GameOptions op;
+    protected KeyBinding bind;
+    
+    protected JPanel leftGUI, rightGUI;
+    
+    protected boolean gameOver;
+    protected boolean leftHold, rightHold, softHold; //keyinput tracking
     protected boolean hasHeld;  // keeps track if the player is able to hold
                                 // again or not; once a piece is locked in, set
                                 // this back to false
     
+    
+    
     public GameManager()
     {
-        this(new GameOptions());
+        this(new GameOptions(), new KeyBinding());
     }
     
-    public GameManager(GameOptions op)
+    public GameManager(GameOptions optionSettings, KeyBinding keyBindSettings)
     {
-        boolean gameOver = false;
+        super(new BorderLayout(10,10));
+        
+        op = optionSettings;
+        bind = keyBindSettings;
+        
+        gameOver = false;
         
         board = new Board(10,22);
         scorecard = new Scorecard();
@@ -34,30 +49,122 @@ public class GameManager {
         
         hasHeld = false;
         
-        while(!gameOver)
+        leftGUI = new JPanel( new BorderLayout(5,5));
+        rightGUI = new JPanel( new BorderLayout(5,5));
+        
+        leftGUI.add(holdBox, BorderLayout.NORTH);
+        
+        rightGUI.add(nextQueue, BorderLayout.NORTH);
+        rightGUI.add(scorecard, BorderLayout.SOUTH);
+        
+        add(leftGUI, BorderLayout.WEST);
+        add(rightGUI, BorderLayout.EAST);
+        add(board, BorderLayout.CENTER);
+        
+        board.setBackground(Color.BLUE);
+        leftGUI.setBackground(Color.yellow);
+        rightGUI.setBackground(Color.green);
+        holdBox.setBackground(Color.PINK);
+        nextQueue.setBackground(Color.RED);
+        scorecard.setBackground(Color.cyan);
+        
+       
+    }
+    
+    public void run()
+    { 
+        
+        
+        System.out.println("running");
+        
+        initTetra('t'); //testing
+        
+        //exit stuff and highscores
+    }
+    
+    public void debugInfo()
+    {
+        for( Chunk c : playTetra.getChunkArray() )
         {
-            //game!
+            System.out.println("Chunk at x/y: " + c.getX() + "/" + c.getY() );
         }
-        
-        //highscore and exit stuff
-        
+    }
+    
+    public void initTetra()
+    {
+        initTetra('0');
     }
     
     public void initTetra(char c)
     {
-        if(c == '0')
+        char tetra = c;
+        
+        if(tetra == '0')
         {
             // initialize from NextQueue (default operation)
+            tetra = nextQueue.pullTetra();
         }
-        else
+        
+        try
         {
-            // current playTetra object probably needs to be destroyed
-            // initialize after performing a hold
+            playTetra = charToTetra(tetra);
+            if(op.ghostTetra)
+            {
+                ghostTetra = charToTetra(tetra);
+                initGhost();
+            }
             
-            // playTetra = new Tetramino(c);
-            // how do we do this?
         }
-    }   //TODO
+        catch(Exception e)
+        {
+            System.err.println(e.getMessage());
+        }
+        
+        repaintTetra();
+    }
+    
+    protected void initGhost()
+    {
+        for(int i = 0; i < 4; i++)
+        {
+            ghostTetra.getChunkArray()[i].setColor(
+                    playTetra.getChunkArray()[i].getColor() + "Ghost");
+        }
+    }
+    
+    protected void placeGhost()
+    {
+        for(int i=0; i < 4; i++)
+        {
+            ghostTetra.getChunkArray()[i].setX(playTetra.getChunkArray()[i].getX());
+            ghostTetra.getChunkArray()[i].setY(playTetra.getChunkArray()[i].getY());
+        }
+        
+        while(down(ghostTetra)){}
+        
+    }
+    
+    public void repaintTetra()
+    {
+        board.clearUnplacedChunks();
+        
+        if(op.ghostTetra)
+        {
+            placeGhost();
+
+            for(Chunk c : ghostTetra.getChunkArray())
+            {
+                board.setChunk(c.getX(), c.getY(), true, false, c.getColor());
+            }
+        }
+        
+        for(Chunk c : playTetra.getChunkArray())
+        {
+            board.setChunk(c.getX(), c.getY(), true, false, c.getColor());
+        }
+        
+        board.repaint();
+    }
     
     protected Tetramino charToTetra(char c) throws Exception
     {
@@ -77,7 +184,6 @@ public class GameManager {
     
     protected boolean hold()
     {
-        // sends playTetra type to HoldBox and recieves the type stored
         if(!hasHeld)
         {
             initTetra(holdBox.swap(playTetra.getType()));
@@ -88,12 +194,63 @@ public class GameManager {
         return false;
     }
     
+    //checks to see if the chunk is sold with x and y transform relative to c
+    protected boolean isSolidChunk(Chunk c, int xTransform, int yTransform)
+    {
+        boolean placed, vis;
+        placed = board.getChunkPlaced(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        vis = board.getChunkVisibility(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        
+        return placed && vis;
+    }
+    
+    protected boolean up()
+    {
+        boolean canMove;
+        for(Chunk c : playTetra.getChunkArray())
+        {
+            if(c.getY() >= board.getGridHeight() - 1)
+                return false;
+            
+            if(isSolidChunk(c,0,1))
+                return false;
+        }
+        
+        playTetra.up();
+        return true;
+    }
+    
+    protected boolean down()
+    {
+        return down(playTetra);
+    }
+    
+    protected boolean down(Tetramino tetra)
+    {
+        for(Chunk c : tetra.getChunkArray())
+        {
+            if(c.getY() <= 0)
+                return false;
+            
+            if(isSolidChunk(c,0,-1))
+                return false;
+        }
+        
+        tetra.down();
+        return true;
+    }
+    
     protected boolean left()
     {
         for(Chunk c : playTetra.getChunkArray())
         {
-            if(c.getX() <= 0)
+            if(c.getX() <= 0)   //bounding box checks
                return false;
+            
+            if(isSolidChunk(c,-1,0))
+                return false;
         }
         
         playTetra.left();
@@ -104,13 +261,109 @@ public class GameManager {
     {
         for(Chunk c : playTetra.getChunkArray())
         {
-            if(c.getX() >= board.getWidth()-1)
+            if(c.getX() >= board.getGridWidth()-1)  //bounding box checks
                return false;
+            
+            if(isSolidChunk(c,1,0))
+                return false;
         }
         
         playTetra.right();
         return true;
     }
     
+    protected boolean lock()
+    {
+        for(Chunk c : playTetra.getChunkArray())
+        {
+            board.setChunk(c.getX(), c.getY(), true, true, c.getColor());
+        }
+        
+        initTetra();
+        hasHeld = false;
+        
+        return true;
+    }
     
+    protected int lineCheck()   //returns array of rows cleared
+    {
+        /* TODO: Finish this
+        for(int i = 0; i < board.getGridHeight(); i++)
+        {
+            int placedBlocks = 0;
+            for(int j = 0; j < board.getGridWidth(); j++)
+            {
+                
+            }     
+        }
+        */
+        
+        return 0;
+    }
+    
+    
+    
+    public void processKey(int key)
+    {
+        /*
+        *
+        *   everything in this function is temporary for testing purposes
+        *
+        */
+        
+        if(key == bind.left)
+        {
+            left();
+            repaintTetra();
+        }
+        else if(key == bind.right)
+        {
+            right();
+            repaintTetra();
+        }
+        else if(key == bind.softFall)
+        {
+            down();
+            repaintTetra();
+        }
+        else if(key == bind.hardFall)
+        {
+            up();
+            repaintTetra();
+        }
+        else if(key == bind.rotClock)
+        {
+            lock();
+        }
+        else if(key == bind.rotCounter)
+        {
+            
+        }
+        else if(key == bind.hold)
+        {
+            hold();
+        }
+        else if(key == bind.pause)
+        {
+            gameOver = true;
+        }
+        
+        //debugInfo();
+    }
+
+    @Override
+    public void keyTyped(KeyEvent ke) {}
+
+    @Override
+    public void keyPressed(KeyEvent ke)
+    {
+        processKey(ke.getKeyCode());
+    }
+
+    @Override
+    public void keyReleased(KeyEvent ke) 
+    {
+        //TODO: repeating keys
+        //somehow repeating keys already... gotta fix?
+    }
 }
