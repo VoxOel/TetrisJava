@@ -22,7 +22,6 @@ public class GameManager extends JPanel implements KeyListener{
     protected JPanel leftGUI, rightGUI;
     
     protected boolean gameOver;
-    protected boolean leftHold, rightHold, softHold; //keyinput tracking
     
     protected boolean [] keyPressHeld;
     
@@ -48,7 +47,7 @@ public class GameManager extends JPanel implements KeyListener{
         
         gameOver = false;
         
-        board = new Board(op.boardWidth,op.skyline+2);
+        board = new Board(op.boardWidth,op.skyline*2);
         scorecard = new Scorecard();
         nextQueue = new NextQueue(op.showNext);
         holdBox = new HoldBox();
@@ -329,14 +328,17 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected void clearLine(int line)
     {
-        //
+        System.out.println("clearing line " + line);
         for(int y = line; y < board.getGridHeight(); y++)
         {
             for(int x = 0; x < board.getGridWidth(); x++)
             {
-                System.out.println("clearing " + x + ':' + y);
+                
                 if(y < board.getGridHeight() - 1)
-                  board.setChunk(x,y,true,true,"grey");
+                    board.setChunk(x, y, 
+                            board.getChunkVisibility(x, y+1),
+                            board.getChunkPlaced(x,y+1),
+                            board.getChunkColor(x,y+1));
                 else
                 {
                     board.setChunk(x, y, false, false, board.getChunkColor(x, y));
@@ -395,7 +397,8 @@ public class GameManager extends JPanel implements KeyListener{
         }
         else if(key == bind.hold)
         {
-            hold();
+            if(op.holdBox)
+                hold();
             keyPressHeld[6] = true;
         }
         else if(key == bind.pause)

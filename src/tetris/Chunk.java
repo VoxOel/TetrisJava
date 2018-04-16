@@ -33,6 +33,7 @@ public class Chunk {
     public Chunk(Chunk c)
     {
         this(c.gridX , c.gridY, c.show, c.color);
+        placed = c.placed;
     }
     
     public boolean setPlaced(boolean b)

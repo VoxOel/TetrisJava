@@ -88,12 +88,7 @@ public class Board extends JPanel {
     {
         return height;
     }
-    
-    public Chunk getChunk(int x, int y)
-    {
-        return chunkGrid[x][y];
-    }
-    
+ 
     public boolean setChunk(Chunk c)
     {
         return setChunk(c.getX() ,c.getY(), c.getVisibility(),
@@ -104,12 +99,6 @@ public class Board extends JPanel {
             int x, int y, boolean show, boolean placed, String color)
     {
         boolean success = true;
-        
-        if(!chunkGrid[x][y].setX(x))
-            success = false;
-        
-        if(!chunkGrid[x][y].setY(y))
-            success = false;
         
         if(!chunkGrid[x][y].setVisibility(show))
             success = false;

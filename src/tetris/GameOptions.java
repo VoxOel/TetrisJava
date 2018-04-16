@@ -8,20 +8,24 @@ public class GameOptions {
     public int showNext;
     public int skyline, boardWidth;
     public boolean superRotation;
+    public boolean holdBox;
     public boolean debugMode;
     
     public GameOptions()
     {
-        //play options
-        ghostTetra = true;
-        placement = PlacementType.EXTENDED;
-        showNext = 6;
-        superRotation = false;
         debugMode = false;
         
-        //set-up options
+        //in-play options
+        ghostTetra = true;
+        placement = PlacementType.EXTENDED;
+        superRotation = false;
+        showNext = 6;
+        holdBox = true;
+        
+        //gamerule options
         boardWidth = 10;
         skyline = 20;
+        
     }
     
 }
