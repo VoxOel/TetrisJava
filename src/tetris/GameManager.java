@@ -140,7 +140,7 @@ public class GameManager extends JPanel implements KeyListener{
             ghostTetra.getChunkArray()[i].setY(playTetra.getChunkArray()[i].getY());
         }
         
-        while(down(ghostTetra)){}
+        while(down(ghostTetra));
         
     }
     
@@ -208,17 +208,7 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected boolean up()
     {
-        boolean canMove;
-        for(Chunk c : playTetra.getChunkArray())
-        {
-            if(c.getY() >= board.getGridHeight() - 1)
-                return false;
-            
-            if(isSolidChunk(c,0,1))
-                return false;
-        }
-        
-        playTetra.up();
+        while(down(playTetra));
         return true;
     }
     
@@ -333,7 +323,7 @@ public class GameManager extends JPanel implements KeyListener{
         }
         else if(key == bind.rotClock)
         {
-            lock();
+            
         }
         else if(key == bind.rotCounter)
         {
@@ -346,6 +336,12 @@ public class GameManager extends JPanel implements KeyListener{
         else if(key == bind.pause)
         {
             gameOver = true;
+        }
+        
+        // debug commands
+        else if(key == bind.debug_lock)
+        {
+            lock();
         }
         
         //debugInfo();
