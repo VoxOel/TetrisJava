@@ -35,7 +35,7 @@ public class Board extends JPanel {
         super.paintComponent(g);
         Graphics2D g2d = (Graphics2D)g;
         ImageIcon border = new ImageIcon(
-                getClass().getResource("../textures/border.png"));
+                getClass().getResource("/tetris/textures/border.png"));
         int borderNativeWidth = border.getImage().getWidth(null);
         int borderNativeHeight = border.getImage().getHeight(null);
         
