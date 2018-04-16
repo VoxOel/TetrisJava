@@ -303,7 +303,7 @@ public class GameManager extends JPanel implements KeyListener{
         //TODO: scoring stuff
         
         //clear lines
-        for(int i = 0; i < 4; i++)
+        for(int i = linesCleared.length - 1; i >= 0; i--)
         {
             if(linesCleared[i] != -1)
                 clearLine(linesCleared[i]);

@@ -133,6 +133,7 @@ public class Board extends JPanel {
         {
             for(int y = 0; y < height; y++)
             {
+                chunkGrid[x][y].setPlaced(false);
                 chunkGrid[x][y].setVisibility(false);
             }
         }
