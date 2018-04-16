@@ -108,17 +108,10 @@ class TetraI extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(3);
-        chunkArray[0].setY(20);
-
-        chunkArray[1].setX(4);
-        chunkArray[1].setY(20);
-
-        chunkArray[2].setX(5);
-        chunkArray[2].setY(20);
-
-        chunkArray[3].setX(6);
-        chunkArray[3].setY(20);
+        chunkArray[0].setX(3);  chunkArray[0].setY(20); 
+        chunkArray[1].setX(4);  chunkArray[1].setY(20);
+        chunkArray[2].setX(5);  chunkArray[2].setY(20);
+        chunkArray[3].setX(6);  chunkArray[3].setY(20);
     }
 
     public void rotateClockwise() { }
@@ -139,17 +132,10 @@ class TetraO extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(4);
-        chunkArray[0].setY(21);
-
-        chunkArray[1].setX(5);
-        chunkArray[1].setY(21);
-
-        chunkArray[2].setX(4);
-        chunkArray[2].setY(20);
-
-        chunkArray[3].setX(5);
-        chunkArray[3].setY(20);
+        chunkArray[0].setX(4);  chunkArray[0].setY(21);
+        chunkArray[1].setX(5);  chunkArray[1].setY(21);
+        chunkArray[2].setX(4);  chunkArray[2].setY(20);
+        chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
     public void rotateClockwise() { }
@@ -170,17 +156,10 @@ class TetraT extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(4);
-        chunkArray[0].setY(21);
-
-        chunkArray[1].setX(3);
-        chunkArray[1].setY(20);
-
-        chunkArray[2].setX(4);
-        chunkArray[2].setY(20);
-
-        chunkArray[3].setX(5);
-        chunkArray[3].setY(20);
+        chunkArray[0].setX(4);  chunkArray[0].setY(21);
+        chunkArray[1].setX(3);  chunkArray[1].setY(20);
+        chunkArray[2].setX(4);  chunkArray[2].setY(20);
+        chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
     public void rotateClockwise() { }
@@ -201,17 +180,10 @@ class TetraS extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(4);
-        chunkArray[0].setY(21);
-
-        chunkArray[1].setX(5);
-        chunkArray[1].setY(21);
-
-        chunkArray[2].setX(3);
-        chunkArray[2].setY(20);
-
-        chunkArray[3].setX(4);
-        chunkArray[3].setY(20);
+        chunkArray[0].setX(4);  chunkArray[0].setY(21);
+        chunkArray[1].setX(5);  chunkArray[1].setY(21);
+        chunkArray[2].setX(3);  chunkArray[2].setY(20);
+        chunkArray[3].setX(4);  chunkArray[3].setY(20);
     }
 
     public void rotateClockwise() { }
@@ -232,17 +204,10 @@ class TetraZ extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(3);
-        chunkArray[0].setY(21);
-
-        chunkArray[1].setX(4);
-        chunkArray[1].setY(21);
-
-        chunkArray[2].setX(4);
-        chunkArray[2].setY(20);
-
-        chunkArray[3].setX(5);
-        chunkArray[3].setY(20);
+        chunkArray[0].setX(3);  chunkArray[0].setY(21);
+        chunkArray[1].setX(4);  chunkArray[1].setY(21);
+        chunkArray[2].setX(4);  chunkArray[2].setY(20);
+        chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
     public void rotateClockwise() { }
@@ -263,17 +228,10 @@ class TetraJ extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(3);
-        chunkArray[0].setY(21);
-
-        chunkArray[1].setX(3);
-        chunkArray[1].setY(20);
-
-        chunkArray[2].setX(4);
-        chunkArray[2].setY(20);
-
-        chunkArray[3].setX(5);
-        chunkArray[3].setY(20);
+        chunkArray[0].setX(3);  chunkArray[0].setY(21);
+        chunkArray[1].setX(3);  chunkArray[1].setY(20);
+        chunkArray[2].setX(4);  chunkArray[2].setY(20);
+        chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 	
     public void rotateClockwise() { }
@@ -294,17 +252,10 @@ class TetraL extends Tetramino
 
     private void initPos()
     {
-        chunkArray[0].setX(5);
-        chunkArray[0].setY(21);
-
-        chunkArray[1].setX(3);
-        chunkArray[1].setY(20);
-
-        chunkArray[2].setX(4);
-        chunkArray[2].setY(20);
-
-        chunkArray[3].setX(5);
-        chunkArray[3].setY(20);
+        chunkArray[0].setX(5);  chunkArray[0].setY(21);
+        chunkArray[1].setX(3);  chunkArray[1].setY(20);
+        chunkArray[2].setX(4);  chunkArray[2].setY(20);
+        chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
     public void rotateClockwise() { }
