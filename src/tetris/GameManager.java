@@ -74,7 +74,7 @@ public class GameManager extends JPanel implements KeyListener{
         
         // Environment Variables
         hasHeld = false;
-        keyPressHeld = new boolean[10];
+        keyPressHeld = new boolean[11];
        
     }
     
@@ -366,6 +366,13 @@ public class GameManager extends JPanel implements KeyListener{
             up();
             repaintTetra();
             keyPressHeld[9] = true;
+        }
+        else if(key == bind.clearBoard)
+        {
+            board.clearAllChunks();
+            board.repaint();
+            repaintTetra();
+            keyPressHeld[10] = true;
         }
         else
         {

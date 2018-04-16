@@ -126,7 +126,7 @@ public class Board extends JPanel {
     
     public void clearUnplacedChunks()
     {
-         for(int x = 0; x < width; x++ )
+         for(int x = 0; x < width; x++)
         {
             for(int y = 0; y < height; y++)
             {
@@ -134,6 +134,17 @@ public class Board extends JPanel {
                 {
                     chunkGrid[x][y].setVisibility(false);
                 }
+            }
+        }
+    }
+    
+    public void clearAllChunks()
+    {
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                chunkGrid[x][y].setVisibility(false);
             }
         }
     }
