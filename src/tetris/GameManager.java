@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.ArrayList;
 import javax.swing.JPanel;
 
 
@@ -209,7 +210,6 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected boolean up()
     {
-        boolean canMove;
         for(Chunk c : playTetra.getChunkArray())
         {
             if(c.getY() >= board.getGridHeight() - 1)
@@ -285,32 +285,52 @@ public class GameManager extends JPanel implements KeyListener{
         return true;
     }
     
-    protected int lineCheck()   //returns array of rows cleared
-    {
-        /* TODO: Finish this
-        for(int i = 0; i < board.getGridHeight(); i++)
-        {
-            int placedBlocks = 0;
-            for(int j = 0; j < board.getGridWidth(); j++)
-            {
-                
-            }     
-        }
-        */
-        
-        return 0;
-    }
-    
-    
-    
     public void processKey(int key)
     {
-        /*
-        *
-        *   everything in this function is temporary for testing purposes
-        *
-        */
-        
+        if(key == bind.left)
+        {
+            left();
+            repaintTetra();
+        }
+        else if(key == bind.right)
+        {
+            right();
+            repaintTetra();
+        }
+        else if(key == bind.softFall)
+        {
+            
+        }
+        else if(key == bind.hardFall)
+        {
+            while(down()){}
+            
+            lock();
+        }
+        else if(key == bind.rotClock)
+        {
+            lock();
+        }
+        else if(key == bind.rotCounter)
+        {
+            
+        }
+        else if(key == bind.hold)
+        {
+            
+        }
+        else if(key == bind.pause)
+        {
+            gameOver = true;
+        }
+        else if(key == bind.debugToggle)
+        {
+            toggleDebug();
+        }
+    }
+    
+    public void processKeyDebug(int key)
+    {
         if(key == bind.left)
         {
             left();
@@ -345,10 +365,24 @@ public class GameManager extends JPanel implements KeyListener{
         }
         else if(key == bind.pause)
         {
+            
+        }
+        else if(key == bind.debugToggle)
+        {
+            toggleDebug();
+        }
+        else if(key == bind.endGame)
+        {
             gameOver = true;
         }
         
+        
         //debugInfo();
+    }
+    
+    protected void toggleDebug()
+    {
+        op.debugMode = !op.debugMode;
     }
 
     @Override
@@ -357,7 +391,14 @@ public class GameManager extends JPanel implements KeyListener{
     @Override
     public void keyPressed(KeyEvent ke)
     {
-        processKey(ke.getKeyCode());
+        if(op.debugMode)
+        {
+            processKeyDebug(ke.getKeyCode());
+        }
+        else
+        {
+            processKey(ke.getKeyCode());
+        }
     }
 
     @Override

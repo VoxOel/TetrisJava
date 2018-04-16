@@ -89,6 +89,17 @@ public class Board extends JPanel {
         return height;
     }
     
+    public Chunk getChunk(int x, int y)
+    {
+        return chunkGrid[x][y];
+    }
+    
+    public boolean setChunk(Chunk c)
+    {
+        return setChunk(c.getX() ,c.getY(), c.getVisibility(),
+                c.getPlaced(), c.getColor());
+    }
+    
     public boolean setChunk(
             int x, int y, boolean show, boolean placed, String color)
     {

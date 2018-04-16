@@ -5,6 +5,7 @@ import java.awt.event.KeyEvent;
 public class KeyBinding {
     public int left, right, softFall, hardFall;
     public int rotClock, rotCounter, hold, pause;
+    public int debugToggle, endGame;
     
     public KeyBinding()
     {
@@ -14,7 +15,12 @@ public class KeyBinding {
         softFall = KeyEvent.VK_DOWN;
         hardFall = KeyEvent.VK_UP;
         rotClock = KeyEvent.VK_CONTROL;
-        pause = KeyEvent.VK_ESCAPE; //temporary?
+        pause = KeyEvent.VK_ESCAPE;
+        
+        //debug controls
+        debugToggle = KeyEvent.VK_PERIOD;
+        endGame = KeyEvent.VK_K;
+        
         
     }
     
