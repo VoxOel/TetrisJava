@@ -30,6 +30,11 @@ public class Chunk {
         color = c;
     }
     
+    public Chunk(Chunk c)
+    {
+        this(c.gridX , c.gridY, c.show, c.color);
+    }
+    
     public boolean setPlaced(boolean b)
     {
         placed = b;
@@ -67,11 +72,7 @@ public class Chunk {
     
     public boolean setX(int i)
     {
-        if( i > 9 || i < 0)
-            return false;
-        
         gridX = i;
-        
         return true;
     }
     
@@ -82,17 +83,20 @@ public class Chunk {
     
     public boolean setY(int i)
     {
-        if( i > 21 || i < 0)
-            return false;
-        
         gridY = i;
-        
         return true;
     }
     
     public int getY()
     {
         return gridY;
+    }
+    
+    public boolean move(int x, int y)
+    {
+        gridX = x;
+        gridY = y;
+        return true;
     }
     
     public ImageIcon getImageIcon()

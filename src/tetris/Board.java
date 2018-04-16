@@ -126,7 +126,7 @@ public class Board extends JPanel {
     
     public void clearUnplacedChunks()
     {
-         for(int x = 0; x < width; x++ )
+         for(int x = 0; x < width; x++)
         {
             for(int y = 0; y < height; y++)
             {
@@ -136,6 +136,29 @@ public class Board extends JPanel {
                 }
             }
         }
+    }
+    
+    public void clearAllChunks()
+    {
+        for(int x = 0; x < width; x++)
+        {
+            for(int y = 0; y < height; y++)
+            {
+                chunkGrid[x][y].setVisibility(false);
+            }
+        }
+    }
+    
+    //checks to see if the chunk is sold with x and y transform relative to c
+    public boolean isSolidChunk(Chunk c, int xTransform, int yTransform)
+    {
+        boolean placed, vis;
+        placed = getChunkPlaced(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        vis = getChunkVisibility(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        
+        return placed && vis;
     }
     
     public boolean getChunkVisibility(int x, int y)
