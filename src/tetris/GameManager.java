@@ -2,10 +2,13 @@ package tetris;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 
 public class GameManager extends JPanel implements KeyListener{
@@ -13,21 +16,20 @@ public class GameManager extends JPanel implements KeyListener{
     protected Scorecard scorecard;
     protected NextQueue nextQueue;
     protected HoldBox holdBox;
-    protected Tetramino playTetra;
-    protected Tetramino ghostTetra;
+    protected Tetramino playTetra, ghostTetra;
     
     protected GameOptions op;
     protected KeyBinding bind;
     
     protected JPanel leftGUI, rightGUI;
     
-    protected boolean gameOver;
-    
     protected boolean [] keyPressHeld;
     
     protected boolean hasHeld;  // keeps track if the player is able to hold
                                 // again or not; once a piece is locked in, set
                                 // this back to false
+    
+    protected Timer fallTimer, lockTimer;
     
     
     
@@ -41,12 +43,10 @@ public class GameManager extends JPanel implements KeyListener{
         super(new BorderLayout(10,10));
         
         // Game Setup Variables
-        
         op = optionSettings;
         bind = keyBindSettings;
         
-        gameOver = false;
-        
+        //display and UI variables and setup
         board = new Board(op.boardWidth,op.skyline*2);
         scorecard = new Scorecard();
         nextQueue = new NextQueue(op.showNext);
@@ -74,26 +74,38 @@ public class GameManager extends JPanel implements KeyListener{
         // Environment Variables
         hasHeld = false;
         keyPressHeld = new boolean[11];
-       
+        
+        lockTimer = new Timer(500, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(!lock())
+                {
+                    gameOver();
+                }
+            }
+        });
+        
+        fallTimer = new Timer(0, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                fall();
+            }
+        });
+        
+        fallTimer.setDelay(calcFallDelay());
+        
     }
     
     public void run()
     { 
-        
-        
-        System.out.println("running");
-        
-        initTetra('0'); //testing
-        
-        //exit stuff and highscores
+        initTetra('0');
+        fallTimer.start();
     }
     
-    public void debugInfo()
+    public void gameOver()
     {
-        for( Chunk c : playTetra.getChunkArray() )
-        {
-            System.out.println("Chunk at x/y: " + c.getX() + "/" + c.getY() );
-        }
+        //TODO make this function do stuff
+        System.out.println("Game Over!");
     }
     
     public void initTetra()
@@ -186,6 +198,8 @@ public class GameManager extends JPanel implements KeyListener{
                 throw new Exception("Attempt to pass char into charToTetra: " + c);
         }
     }
+    
+    protected void fall
     
     protected boolean hold()
     {
@@ -328,7 +342,6 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected void clearLine(int line)
     {
-        System.out.println("clearing line " + line);
         for(int y = line; y < board.getGridHeight(); y++)
         {
             for(int x = 0; x < board.getGridWidth(); x++)
@@ -416,7 +429,7 @@ public class GameManager extends JPanel implements KeyListener{
         
         if(key == bind.endGame)
         {
-            gameOver = true;
+            gameOver();
             keyPressHeld[7] = true;
         }
         
@@ -443,9 +456,6 @@ public class GameManager extends JPanel implements KeyListener{
         {
             processKey(key);
         }
-        
-        
-        //debugInfo();
     }
     
     protected void toggleDebug()
