@@ -22,7 +22,6 @@ public class GameManager extends JPanel implements KeyListener{
     protected JPanel leftGUI, rightGUI;
     
     protected boolean gameOver;
-    protected boolean leftHold, rightHold, softHold; //keyinput tracking
     
     protected boolean [] keyPressHeld;
     
@@ -48,7 +47,7 @@ public class GameManager extends JPanel implements KeyListener{
         
         gameOver = false;
         
-        board = new Board(10,22);
+        board = new Board(op.boardWidth,op.skyline*2);
         scorecard = new Scorecard();
         nextQueue = new NextQueue(op.showNext);
         holdBox = new HoldBox();
@@ -278,9 +277,74 @@ public class GameManager extends JPanel implements KeyListener{
             board.setChunk(c.getX(), c.getY(), true, true, c.getColor());
         }
         
+        clearCheck();
+        
         initTetra();
         hasHeld = false;
         return true;
+    }
+    
+    protected int clearCheck()
+    {
+        
+        //check line clears
+        int linesCleared[] = new int[4];
+        Arrays.fill(linesCleared, -1);
+        
+        int lines = 0;
+        for(int y = 0; y < 20; y++)
+        {
+            if(checkLine(y))
+            {
+                linesCleared[lines++] = y;
+            }
+        }
+        
+        //TODO: scoring stuff
+        
+        //clear lines
+        for(int i = linesCleared.length - 1; i >= 0; i--)
+        {
+            if(linesCleared[i] != -1)
+                clearLine(linesCleared[i]);
+        }
+        
+        return lines;
+    }
+    
+    //returns true if line is filled
+    protected boolean checkLine(int line)
+    {
+        for(int x = 0; x < board.getGridWidth(); x++)
+        {
+            if(!board.getChunkPlaced(x,line))
+            {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    
+    protected void clearLine(int line)
+    {
+        System.out.println("clearing line " + line);
+        for(int y = line; y < board.getGridHeight(); y++)
+        {
+            for(int x = 0; x < board.getGridWidth(); x++)
+            {
+                
+                if(y < board.getGridHeight() - 1)
+                    board.setChunk(x, y, 
+                            board.getChunkVisibility(x, y+1),
+                            board.getChunkPlaced(x,y+1),
+                            board.getChunkColor(x,y+1));
+                else
+                {
+                    board.setChunk(x, y, false, false, board.getChunkColor(x, y));
+                }
+            }
+        }
     }
     
     public void processKey(int key)
@@ -333,7 +397,8 @@ public class GameManager extends JPanel implements KeyListener{
         }
         else if(key == bind.hold)
         {
-            hold();
+            if(op.holdBox)
+                hold();
             keyPressHeld[6] = true;
         }
         else if(key == bind.pause)
