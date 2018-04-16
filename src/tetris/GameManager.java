@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.util.Arrays;
 import javax.swing.JPanel;
 
 
@@ -22,6 +23,9 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected boolean gameOver;
     protected boolean leftHold, rightHold, softHold; //keyinput tracking
+    
+    protected boolean [] keyPressHeld;
+    
     protected boolean hasHeld;  // keeps track if the player is able to hold
                                 // again or not; once a piece is locked in, set
                                 // this back to false
@@ -37,6 +41,8 @@ public class GameManager extends JPanel implements KeyListener{
     {
         super(new BorderLayout(10,10));
         
+        // Game Setup Variables
+        
         op = optionSettings;
         bind = keyBindSettings;
         
@@ -46,8 +52,6 @@ public class GameManager extends JPanel implements KeyListener{
         scorecard = new Scorecard();
         nextQueue = new NextQueue(op.showNext);
         holdBox = new HoldBox();
-        
-        hasHeld = false;
         
         leftGUI = new JPanel( new BorderLayout(5,5));
         rightGUI = new JPanel( new BorderLayout(5,5));
@@ -68,6 +72,9 @@ public class GameManager extends JPanel implements KeyListener{
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
         
+        // Environment Variables
+        hasHeld = false;
+        keyPressHeld = new boolean[10];
        
     }
     
@@ -141,7 +148,6 @@ public class GameManager extends JPanel implements KeyListener{
         }
         
         while(down(ghostTetra));
-        
     }
     
     public void repaintTetra()
@@ -208,6 +214,22 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected boolean up()
     {
+        boolean canMove;
+        for(Chunk c : playTetra.getChunkArray())
+        {
+            if(c.getY() >= board.getGridHeight() - 1)
+                return false;
+            
+            if(isSolidChunk(c,0,1))
+                return false;
+        }
+        
+        playTetra.up();
+        return true;
+    }
+    
+    protected boolean space()
+    {
         while(down(playTetra));
         return true;
     }
@@ -271,7 +293,6 @@ public class GameManager extends JPanel implements KeyListener{
         
         initTetra();
         hasHeld = false;
-        
         return true;
     }
     
@@ -305,43 +326,60 @@ public class GameManager extends JPanel implements KeyListener{
         {
             left();
             repaintTetra();
+            keyPressHeld[0] = true;
         }
         else if(key == bind.right)
         {
             right();
             repaintTetra();
+            keyPressHeld[1] = true;
         }
         else if(key == bind.softFall)
         {
             down();
             repaintTetra();
+            keyPressHeld[2] = true;
         }
         else if(key == bind.hardFall)
         {
-            up();
-            repaintTetra();
+            if(!keyPressHeld[3])
+            {
+                space();
+                lock();
+                repaintTetra();
+                keyPressHeld[3] = true;
+            }
         }
         else if(key == bind.rotClock)
         {
-            
+            keyPressHeld[4] = true;
         }
         else if(key == bind.rotCounter)
         {
-            
+            keyPressHeld[5] = true;
         }
         else if(key == bind.hold)
         {
             hold();
+            keyPressHeld[6] = true;
         }
         else if(key == bind.pause)
         {
             gameOver = true;
+            keyPressHeld[7] = true;
         }
         
         // debug commands
         else if(key == bind.debug_lock)
         {
             lock();
+            keyPressHeld[8] = true;
+        }
+        else if(key == bind.debug_up)
+        {
+            up();
+            repaintTetra();
+            keyPressHeld[9] = true;
         }
         
         //debugInfo();
@@ -359,7 +397,10 @@ public class GameManager extends JPanel implements KeyListener{
     @Override
     public void keyReleased(KeyEvent ke) 
     {
-        //TODO: repeating keys
-        //somehow repeating keys already... gotta fix?
+        // I feel like this is definitely not the solution that
+        // we want because it sets the entire array to false again, but
+        // after playing around a bit it seems to work exactly like it
+        // should if it was correct... see function up() - hardFall
+        Arrays.fill(keyPressHeld, false);
     }
 }
