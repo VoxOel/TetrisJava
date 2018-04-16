@@ -11,7 +11,7 @@ public class RotationHandler
             case 'i':
                 temp = new TetraI((TetraI)t);
                 break;
-/*          case 'o':
+            case 'o':
                 temp = new TetraO((TetraO)t);
                 break;
             case 't':
@@ -29,9 +29,8 @@ public class RotationHandler
             case 'l':
                 temp = new TetraL((TetraL)t);
                 break;
-*/
             default :
-                System.out.println("clockwiseRotationSafe(): invalid tetra input");
+                System.out.println("RotationHandler.rotationSafe: Invalid tetra input");
                 return false;
         }
         
