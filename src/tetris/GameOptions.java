@@ -7,6 +7,7 @@ public class GameOptions {
     public PlacementType placement;
     public int showNext;
     public boolean superRotation;
+    public boolean debugMode;
     
     public GameOptions()
     {
@@ -14,6 +15,7 @@ public class GameOptions {
         placement = PlacementType.EXTENDED;
         showNext = 6;
         superRotation = false;
+        debugMode = false;
     }
     
 }
