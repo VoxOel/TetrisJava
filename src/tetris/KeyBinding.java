@@ -7,7 +7,7 @@ public class KeyBinding {
     public int rotClock, rotCounter, hold, pause;
     
     //debug tools
-    public int debugToggle, endGame, lock, up;
+    public int debugToggle, endGame, lock, up, clearBoard;
     
     public KeyBinding()
     {
@@ -26,6 +26,7 @@ public class KeyBinding {
         endGame = KeyEvent.VK_K;
         lock = KeyEvent.VK_CONTROL;
         up = KeyEvent.VK_UP;
+        clearBoard = KeyEvent.VK_BACK_SPACE;
     }
     
 }

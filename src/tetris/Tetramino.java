@@ -91,12 +91,8 @@ public abstract class Tetramino
     {
         switch(c)
         {
-            case 'i':
-            case 'o':
-            case 't':
-            case 's':
-            case 'z':
-            case 'j':
+            case 'i':   case 'o':   case 't':
+            case 's':   case 'z':   case 'j':
             case 'l': 
                 type = c;
                 return true;
@@ -107,6 +103,7 @@ public abstract class Tetramino
     }
     
     public abstract void rotateClockwise();
+    
     public void rotateCounterClockwise()
     {
         for(int i = 0; i < 3; i++)
@@ -142,7 +139,8 @@ class TetraI extends Tetramino
     @Override
     public void rotateClockwise()
     {
-        switch (face) {
+        switch(face)
+        {
             case 'n':
                 chunkArray[0].move(chunkArray[0].getX() + 2, chunkArray[0].getY() + 1);
                 chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() + 0);
@@ -171,8 +169,6 @@ class TetraI extends Tetramino
                 chunkArray[3].move(chunkArray[3].getX() + 2, chunkArray[3].getY() - 1);
                 face = 'n';
                 break;
-            default:
-                break;
         }
     }
 }
@@ -187,6 +183,11 @@ class TetraO extends Tetramino
             chunkArray[i] = new Chunk("yellow");
         }
         initPos();
+    }
+    
+    public TetraO(TetraO t)
+    {
+        super(t);
     }
 
     private void initPos()
@@ -212,6 +213,11 @@ class TetraT extends Tetramino
         }
         initPos();
     }
+    
+    public TetraT(TetraT t)
+    {
+        super(t);
+    }
 
     private void initPos()
     {
@@ -222,7 +228,40 @@ class TetraT extends Tetramino
     }
 
     @Override
-    public void rotateClockwise() { }
+    public void rotateClockwise()
+    {
+        switch(face)
+        {
+            case 'n':
+                chunkArray[0].move(chunkArray[0].getX() + 1, chunkArray[0].getY() - 1);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() - 1);
+                face = 'e';
+                break;
+            case 'e':
+                chunkArray[0].move(chunkArray[0].getX() - 1, chunkArray[0].getY() - 1);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() + 1);
+                face = 's';
+                break;
+            case 's':
+                chunkArray[0].move(chunkArray[0].getX() - 1, chunkArray[0].getY() + 1);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() + 1);
+                face = 'w';
+                break;
+            case 'w':
+                chunkArray[0].move(chunkArray[0].getX() + 1, chunkArray[0].getY() + 1);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() - 1);
+                face = 'n';
+                break;
+        }
+    }
 }
 
 class TetraS extends Tetramino
@@ -236,6 +275,11 @@ class TetraS extends Tetramino
         }
         initPos();
     }
+    
+    public TetraS(TetraS t)
+    {
+        super(t);
+    }
 
     private void initPos()
     {
@@ -246,7 +290,40 @@ class TetraS extends Tetramino
     }
 
     @Override
-    public void rotateClockwise() { }
+    public void rotateClockwise()
+    {
+        switch(face)
+        {
+            case 'n':
+                chunkArray[0].move(chunkArray[0].getX() + 1, chunkArray[0].getY() - 1);
+                chunkArray[1].move(chunkArray[1].getX() + 0, chunkArray[1].getY() - 2);
+                chunkArray[2].move(chunkArray[2].getX() + 1, chunkArray[2].getY() + 1);
+                chunkArray[3].move(chunkArray[3].getX() + 0, chunkArray[3].getY() + 0);
+                face = 'e';
+                break;
+            case 'e':
+                chunkArray[0].move(chunkArray[0].getX() - 1, chunkArray[0].getY() - 1);
+                chunkArray[1].move(chunkArray[1].getX() - 2, chunkArray[1].getY() + 0);
+                chunkArray[2].move(chunkArray[2].getX() + 1, chunkArray[2].getY() - 1);
+                chunkArray[3].move(chunkArray[3].getX() + 0, chunkArray[3].getY() + 0);
+                face = 's';
+                break;
+            case 's':
+                chunkArray[0].move(chunkArray[0].getX() - 1, chunkArray[0].getY() + 1);
+                chunkArray[1].move(chunkArray[1].getX() + 0, chunkArray[1].getY() + 2);
+                chunkArray[2].move(chunkArray[2].getX() - 1, chunkArray[2].getY() - 1);
+                chunkArray[3].move(chunkArray[3].getX() + 0, chunkArray[3].getY() + 0);
+                face = 'w';
+                break;
+            case 'w':
+                chunkArray[0].move(chunkArray[0].getX() + 1, chunkArray[0].getY() + 1);
+                chunkArray[1].move(chunkArray[1].getX() + 2, chunkArray[1].getY() + 0);
+                chunkArray[2].move(chunkArray[2].getX() - 1, chunkArray[2].getY() + 1);
+                chunkArray[3].move(chunkArray[3].getX() + 0, chunkArray[3].getY() + 0);
+                face = 'n';
+                break;
+        }
+    }
 }
 
 class TetraZ extends Tetramino
@@ -260,6 +337,11 @@ class TetraZ extends Tetramino
         }
         initPos();
     }
+    
+    public TetraZ(TetraZ t)
+    {
+        super(t);
+    }
 
     private void initPos()
     {
@@ -270,7 +352,40 @@ class TetraZ extends Tetramino
     }
 
     @Override
-    public void rotateClockwise() { }
+    public void rotateClockwise()
+    {
+        switch(face)
+        {
+            case 'n':
+                chunkArray[0].move(chunkArray[0].getX() + 2, chunkArray[0].getY() + 0);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() - 1);
+                face = 'e';
+                break;
+            case 'e':
+                chunkArray[0].move(chunkArray[0].getX() + 0, chunkArray[0].getY() - 2);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() + 1);
+                face = 's';
+                break;
+            case 's':
+                chunkArray[0].move(chunkArray[0].getX() - 2, chunkArray[0].getY() + 0);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() + 1);
+                face = 'w';
+                break;
+            case 'w':
+                chunkArray[0].move(chunkArray[0].getX() + 0, chunkArray[0].getY() + 2);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() - 1);
+                face = 'n';
+                break;
+        }
+    }
 }
 
 class TetraJ extends Tetramino
@@ -284,6 +399,11 @@ class TetraJ extends Tetramino
         }
         initPos();
     }
+    
+    public TetraJ(TetraJ t)
+    {
+        super(t);
+    }
 
     private void initPos()
     {
@@ -294,7 +414,40 @@ class TetraJ extends Tetramino
     }
 	
     @Override
-    public void rotateClockwise() { }
+    public void rotateClockwise()
+    {
+        switch(face)
+        {
+            case 'n':
+                chunkArray[0].move(chunkArray[0].getX() + 2, chunkArray[0].getY() + 0);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() - 1);
+                face = 'e';
+                break;
+            case 'e':
+                chunkArray[0].move(chunkArray[0].getX() + 0, chunkArray[0].getY() - 2);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() + 1);
+                face = 's';
+                break;
+            case 's':
+                chunkArray[0].move(chunkArray[0].getX() - 2, chunkArray[0].getY() + 0);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() + 1);
+                face = 'w';
+                break;
+            case 'w':
+                chunkArray[0].move(chunkArray[0].getX() + 0, chunkArray[0].getY() + 2);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() - 1);
+                face = 'n';
+                break;
+        }
+    }
 }
 
 class TetraL extends Tetramino
@@ -308,6 +461,11 @@ class TetraL extends Tetramino
         }
         initPos();
     }
+    
+    public TetraL(TetraL t)
+    {
+        super(t);
+    }
 
     private void initPos()
     {
@@ -318,5 +476,38 @@ class TetraL extends Tetramino
     }
 
     @Override
-    public void rotateClockwise() { }
+    public void rotateClockwise()
+    {
+        switch(face)
+        {
+            case 'n':
+                chunkArray[0].move(chunkArray[0].getX() + 0, chunkArray[0].getY() - 2);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() - 1);
+                face = 'e';
+                break;
+            case 'e':
+                chunkArray[0].move(chunkArray[0].getX() - 2, chunkArray[0].getY() + 0);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() + 1);
+                face = 's';
+                break;
+            case 's':
+                chunkArray[0].move(chunkArray[0].getX() + 0, chunkArray[0].getY() + 2);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() + 1);
+                face = 'w';
+                break;
+            case 'w':
+                chunkArray[0].move(chunkArray[0].getX() + 2, chunkArray[0].getY() + 0);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() - 1);
+                face = 'n';
+                break;
+        }
+    }
 }
