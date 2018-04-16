@@ -148,7 +148,7 @@ public class GameManager extends JPanel implements KeyListener{
             ghostTetra.getChunkArray()[i].setY(playTetra.getChunkArray()[i].getY());
         }
         
-        while(down(ghostTetra));
+        while(down(ghostTetra)){}
     }
     
     public void repaintTetra()
@@ -228,9 +228,9 @@ public class GameManager extends JPanel implements KeyListener{
         return true;
     }
     
-    protected boolean space()
+    protected boolean hardFall()
     {
-        while(down(playTetra));
+        while(down(playTetra)){}
         return true;
     }
     
@@ -261,7 +261,7 @@ public class GameManager extends JPanel implements KeyListener{
             if(c.getX() <= 0)   //bounding box checks
                return false;
             
-            if(isSolidChunk(c,-1,0))
+            if(isSolidChunk(c,-1,0))    //collision check
                 return false;
         }
         
@@ -276,7 +276,7 @@ public class GameManager extends JPanel implements KeyListener{
             if(c.getX() >= board.getGridWidth()-1)  //bounding box checks
                return false;
             
-            if(isSolidChunk(c,1,0))
+            if(isSolidChunk(c,1,0)) //collision check
                 return false;
         }
         
@@ -298,51 +298,7 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void processKey(int key)
     {
-        if(key == bind.left)
-        {
-            left();
-            repaintTetra();
-        }
-        else if(key == bind.right)
-        {
-            right();
-            repaintTetra();
-        }
-        else if(key == bind.softFall)
-        {
-            
-        }
-        else if(key == bind.hardFall)
-        {
-            while(down()){}
-            
-            lock();
-        }
-        else if(key == bind.rotClock)
-        {
-            lock();
-        }
-        else if(key == bind.rotCounter)
-        {
-            
-        }
-        else if(key == bind.hold)
-        {
-            
-        }
-        else if(key == bind.pause)
-        {
-            gameOver = true;
-        }
-        else if(key == bind.debugToggle)
-        {
-            toggleDebug();
-        }
-    }
-    
-    public void processKeyDebug(int key)
-    {
-        if(key == bind.left)
+         if(key == bind.left)
         {
             left();
             repaintTetra();
@@ -364,7 +320,7 @@ public class GameManager extends JPanel implements KeyListener{
         {
             if(!keyPressHeld[3])
             {
-                space();
+                hardFall();
                 lock();
                 repaintTetra();
                 keyPressHeld[3] = true;
@@ -391,23 +347,32 @@ public class GameManager extends JPanel implements KeyListener{
         {
             toggleDebug();
         }
-        else if(key == bind.endGame)
+    }
+    
+    public void processKeyDebug(int key)
+    {
+        
+        if(key == bind.endGame)
         {
             gameOver = true;
             keyPressHeld[7] = true;
         }
         
         // debug commands
-        else if(key == bind.debug_lock)
+        else if(key == bind.lock)
         {
             lock();
             keyPressHeld[8] = true;
         }
-        else if(key == bind.debug_up)
+        else if(key == bind.up)
         {
             up();
             repaintTetra();
             keyPressHeld[9] = true;
+        }
+        else
+        {
+            processKey(key);
         }
         
         
