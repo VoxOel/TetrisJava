@@ -102,7 +102,7 @@ public class Chunk {
     
     public ImageIcon getImageIcon()
     {
-        ImageIcon ii = new ImageIcon(this.getClass().getResource("../textures/" + color + ".png"));
+        ImageIcon ii = new ImageIcon(this.getClass().getResource("/tetris/textures/" + color + ".png"));
         
         return ii;
     }
