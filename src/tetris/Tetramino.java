@@ -6,12 +6,23 @@ public abstract class Tetramino
     protected Chunk[] chunkArray;
     protected char type;
     protected int lowest;
+    protected char face;
 
     public Tetramino(char c)
     {
         chunkArray = new Chunk[4];
         lowest = 99999;
+        face = 'n';
         setType(c);
+    }
+    
+    public Tetramino(Tetramino t)
+    {
+        chunkArray = new Chunk[4];
+        for(int i = 0; i < 4; i++)
+            chunkArray[i] = new Chunk(t.chunkArray[i]);
+        face = t.face;
+        setType(t.type);
     }
 
     protected void checkLowest()
@@ -70,6 +81,11 @@ public abstract class Tetramino
     {
         return type;
     }
+    
+    public char getFace()
+    {
+        return face;
+    }
 
     private boolean setType(char c)
     {
@@ -91,7 +107,11 @@ public abstract class Tetramino
     }
     
     public abstract void rotateClockwise();
-    public abstract void rotateCounterClockwise();
+    public void rotateCounterClockwise()
+    {
+        for(int i = 0; i < 3; i++)
+            rotateClockwise();
+    }
 }
 
 class TetraI extends Tetramino
@@ -105,6 +125,11 @@ class TetraI extends Tetramino
         }
         initPos();
     }
+    
+    public TetraI(TetraI t)
+    {
+        super(t);
+    }
 
     private void initPos()
     {
@@ -114,8 +139,42 @@ class TetraI extends Tetramino
         chunkArray[3].setX(6);  chunkArray[3].setY(20);
     }
 
-    public void rotateClockwise() { }
-    public void rotateCounterClockwise() { }
+    @Override
+    public void rotateClockwise()
+    {
+        switch (face) {
+            case 'n':
+                chunkArray[0].move(chunkArray[0].getX() + 2, chunkArray[0].getY() + 1);
+                chunkArray[1].move(chunkArray[1].getX() + 1, chunkArray[1].getY() + 0);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() - 1);
+                chunkArray[3].move(chunkArray[3].getX() - 1, chunkArray[3].getY() - 2);
+                face = 'e';
+                break;
+            case 'e':
+                chunkArray[0].move(chunkArray[0].getX() + 1, chunkArray[0].getY() - 2);
+                chunkArray[1].move(chunkArray[1].getX() + 0, chunkArray[1].getY() - 1);
+                chunkArray[2].move(chunkArray[2].getX() - 1, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() - 2, chunkArray[3].getY() + 1);
+                face = 's';
+                break;
+            case 's':
+                chunkArray[0].move(chunkArray[0].getX() - 2, chunkArray[0].getY() - 1);
+                chunkArray[1].move(chunkArray[1].getX() - 1, chunkArray[1].getY() + 0);
+                chunkArray[2].move(chunkArray[2].getX() + 0, chunkArray[2].getY() + 1);
+                chunkArray[3].move(chunkArray[3].getX() + 1, chunkArray[3].getY() + 2);
+                face = 'w';
+                break;
+            case 'w':
+                chunkArray[0].move(chunkArray[0].getX() - 1, chunkArray[0].getY() + 2);
+                chunkArray[1].move(chunkArray[1].getX() + 0, chunkArray[1].getY() + 1);
+                chunkArray[2].move(chunkArray[2].getX() + 1, chunkArray[2].getY() + 0);
+                chunkArray[3].move(chunkArray[3].getX() + 2, chunkArray[3].getY() - 1);
+                face = 'n';
+                break;
+            default:
+                break;
+        }
+    }
 }
 
 class TetraO extends Tetramino
@@ -138,8 +197,8 @@ class TetraO extends Tetramino
         chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
+    @Override
     public void rotateClockwise() { }
-    public void rotateCounterClockwise() { }
 }
 
 class TetraT extends Tetramino
@@ -162,8 +221,8 @@ class TetraT extends Tetramino
         chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
+    @Override
     public void rotateClockwise() { }
-    public void rotateCounterClockwise() { }
 }
 
 class TetraS extends Tetramino
@@ -186,8 +245,8 @@ class TetraS extends Tetramino
         chunkArray[3].setX(4);  chunkArray[3].setY(20);
     }
 
+    @Override
     public void rotateClockwise() { }
-    public void rotateCounterClockwise() { }
 }
 
 class TetraZ extends Tetramino
@@ -210,8 +269,8 @@ class TetraZ extends Tetramino
         chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
+    @Override
     public void rotateClockwise() { }
-    public void rotateCounterClockwise() { }
 }
 
 class TetraJ extends Tetramino
@@ -234,8 +293,8 @@ class TetraJ extends Tetramino
         chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 	
+    @Override
     public void rotateClockwise() { }
-    public void rotateCounterClockwise() { }
 }
 
 class TetraL extends Tetramino
@@ -258,6 +317,6 @@ class TetraL extends Tetramino
         chunkArray[3].setX(5);  chunkArray[3].setY(20);
     }
 
+    @Override
     public void rotateClockwise() { }
-    public void rotateCounterClockwise() { }
 }

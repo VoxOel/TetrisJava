@@ -138,6 +138,18 @@ public class Board extends JPanel {
         }
     }
     
+    //checks to see if the chunk is sold with x and y transform relative to c
+    public boolean isSolidChunk(Chunk c, int xTransform, int yTransform)
+    {
+        boolean placed, vis;
+        placed = getChunkPlaced(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        vis = getChunkVisibility(c.getX() + xTransform, 
+                c.getY() + yTransform);
+        
+        return placed && vis;
+    }
+    
     public boolean getChunkVisibility(int x, int y)
     {
         return chunkGrid[x][y].getVisibility();
