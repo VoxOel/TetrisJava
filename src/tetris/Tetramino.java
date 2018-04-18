@@ -38,6 +38,18 @@ public abstract class Tetramino
     {
         return lowest;
     }
+    
+    public int getCurrentLow()
+    {
+        int low = 99999;
+        for(Chunk c : chunkArray)
+        {
+            if(c.getY() < low)
+                low = c.getY();
+        }
+        
+        return low;
+    }
 
     public void up()
     {
