@@ -2,18 +2,23 @@ package tetris;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
+import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 
 public class GameManager extends JPanel implements KeyListener{
+    protected JPanel dispGuide;
     protected Board board;
     protected Scorecard scorecard;
     protected NextQueue nextQueue;
@@ -35,7 +40,7 @@ public class GameManager extends JPanel implements KeyListener{
     protected int lockDownTracker;
     
     //sound
-    SoundHandler bgm;
+    SoundHandler bgm;       //background music
     
     
     
@@ -46,13 +51,14 @@ public class GameManager extends JPanel implements KeyListener{
     
     public GameManager(GameOptions optionSettings, KeyBinding keyBindSettings)
     {
-        super(new GridBagLayout());
+        super(null);
         
         // Game Setup Variables
         op = optionSettings;
         bind = keyBindSettings;
         
         //display and UI variables and setup
+        dispGuide = new JPanel(new GridBagLayout());
         board = new Board(op.boardWidth,op.skyline*2);
         scorecard = new Scorecard();
         nextQueue = new NextQueue(op.showNext);
@@ -62,39 +68,49 @@ public class GameManager extends JPanel implements KeyListener{
 
         constr.fill = GridBagConstraints.BOTH;
         
-        
         constr.gridx = 0;
         constr.gridy = 0;
-        constr.weightx = 0.3;
+        constr.weightx = 0.48;
         constr.weighty = 1.0;
         constr.gridheight = 1;
-        add(holdBox,constr);
+        dispGuide.add(holdBox,constr);
 
         constr.gridx = 1;
         constr.gridy = 0;
-        constr.weightx = 0.35;
+        constr.weightx = 0.88;
         constr.weighty = 1.0;
         constr.gridheight = 3;
-        add(board,constr);
+        dispGuide.add(board,constr);
         
         constr.gridx = 2;
         constr.gridy = 0;
-        constr.weightx = 0.35;
+        constr.weightx = 0.48;
         constr.weighty = 0.6;
         constr.gridheight = 2;
-        add(nextQueue,constr);
+        dispGuide.add(nextQueue,constr);
         
         constr.gridx = 2;
         constr.gridy = 2;
         constr.weightx = 0.35;
         constr.weighty = 0.4;
         constr.gridheight = 1;
-        add(scorecard,constr);
+        dispGuide.add(scorecard,constr);
         
+        add(dispGuide, BorderLayout.CENTER);
+        
+        /*
+        setBackground(Color.YELLOW);
         board.setBackground(Color.BLACK);
         holdBox.setBackground(Color.GREEN);
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
+        */
+        
+        board.setOpaque(false);
+        holdBox.setOpaque(false);
+        nextQueue.setOpaque(false);
+        scorecard.setOpaque(false);
+        
         
         //sound
         bgm = new SoundHandler("/tetris/audio/themeA.wav");
@@ -131,6 +147,48 @@ public class GameManager extends JPanel implements KeyListener{
             }
         });
         
+    }
+    
+    @Override
+    public void paintComponent(Graphics g)
+    {
+        super.paintComponent(g);
+        
+        Image imageBorder = (new ImageIcon(
+                getClass().getResource("/tetris/textures/border.png"))
+                ).getImage();
+        Image imageNext = (new ImageIcon(
+                getClass().getResource("/tetris/textures/nextBox.png"))
+                ).getImage();
+        Image imageHold = (new ImageIcon(
+                getClass().getResource("/tetris/textures/holdBox.png"))
+                ).getImage();
+        Image imageScore = (new ImageIcon(
+                getClass().getResource("/tetris/textures/scoreBox.png"))
+                ).getImage();
+        
+        int drawHeight = imageBorder.getHeight(null);
+        int drawWidth = imageBorder.getWidth(null) +
+                imageNext.getWidth(null) +
+                imageHold.getWidth(null);
+        
+        drawHeight = drawHeight + drawHeight/20;
+        drawWidth = drawWidth + drawWidth/10;
+        
+        int scale = 1;
+        while(drawHeight*(scale+1) <= getHeight() && 
+                drawWidth*(scale+1) <= getWidth())
+            scale++;
+        
+        drawHeight *= scale;
+        drawWidth *= scale;
+        
+        int drawX = getWidth()/2 - drawWidth/2;
+        int drawY = getHeight()/2 - drawHeight/2;
+        
+        dispGuide.setBounds(drawX, drawY, drawWidth, drawHeight);
+        
+        validate();
     }
     
     public void run()
