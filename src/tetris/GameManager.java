@@ -2,10 +2,13 @@ package tetris;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.Arrays;
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 
 public class GameManager extends JPanel implements KeyListener{
@@ -13,21 +16,23 @@ public class GameManager extends JPanel implements KeyListener{
     protected Scorecard scorecard;
     protected NextQueue nextQueue;
     protected HoldBox holdBox;
-    protected Tetramino playTetra;
-    protected Tetramino ghostTetra;
+    protected Tetramino playTetra, ghostTetra;
+    protected int tetraLowest;
     
     protected GameOptions op;
     protected KeyBinding bind;
     
     protected JPanel leftGUI, rightGUI;
     
-    protected boolean gameOver;
-    
-    protected boolean [] keyPressHeld;
+    protected KeyHold keyHold;
     
     protected boolean hasHeld;  // keeps track if the player is able to hold
                                 // again or not; once a piece is locked in, set
                                 // this back to false
+    
+    protected Timer fallTimer, lockTimer;
+    protected boolean inLockDown, shouldLock;
+    protected int lockDownTracker;
     
     
     
@@ -41,12 +46,10 @@ public class GameManager extends JPanel implements KeyListener{
         super(new BorderLayout(10,10));
         
         // Game Setup Variables
-        
         op = optionSettings;
         bind = keyBindSettings;
         
-        gameOver = false;
-        
+        //display and UI variables and setup
         board = new Board(op.boardWidth,op.skyline*2);
         scorecard = new Scorecard();
         nextQueue = new NextQueue(op.showNext);
@@ -64,7 +67,7 @@ public class GameManager extends JPanel implements KeyListener{
         add(rightGUI, BorderLayout.EAST);
         add(board, BorderLayout.CENTER);
         
-        board.setBackground(Color.BLUE);
+        board.setBackground(Color.BLACK);
         leftGUI.setBackground(Color.yellow);
         rightGUI.setBackground(Color.green);
         holdBox.setBackground(Color.PINK);
@@ -73,27 +76,46 @@ public class GameManager extends JPanel implements KeyListener{
         
         // Environment Variables
         hasHeld = false;
-        keyPressHeld = new boolean[11];
-       
+        keyHold = new KeyHold();
+        
+        lockTimer = new Timer(500, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                if(down())
+                {
+                    up();
+                    shouldLock = true;
+                }
+                else
+                {
+                    lock();
+                }  
+            }
+        });
+        
+        lockTimer.setRepeats(false);
+        inLockDown = false;
+        lockDownTracker = 0;
+        
+        fallTimer = new Timer(0, new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent ae) {
+                fall();
+            }
+        });
+        
     }
     
     public void run()
     { 
-        
-        
-        System.out.println("running");
-        
-        initTetra('0'); //testing
-        
-        //exit stuff and highscores
+        initTetra('0');
+        fallTimer.start();
     }
     
-    public void debugInfo()
+    public void gameOver()
     {
-        for( Chunk c : playTetra.getChunkArray() )
-        {
-            System.out.println("Chunk at x/y: " + c.getX() + "/" + c.getY() );
-        }
+        //TODO make this function do stuff
+        System.out.println("Game Over!");
     }
     
     public void initTetra()
@@ -124,6 +146,18 @@ public class GameManager extends JPanel implements KeyListener{
         catch(Exception e)
         {
             System.err.println(e.getMessage());
+        }
+        
+        tetraLowest = playTetra.getLowest();
+        
+        fallTimer.setDelay(calcFallDelay());
+        
+        fallTimer.restart();
+        
+        for( Chunk ch : playTetra.getChunkArray())
+        {
+            if(board.isSolidChunk(ch, 0, 0))
+                gameOver();
         }
         
         repaintTetra();
@@ -185,6 +219,53 @@ public class GameManager extends JPanel implements KeyListener{
             default:
                 throw new Exception("Attempt to pass char into charToTetra: " + c);
         }
+    }
+    
+    protected void fall()
+    {
+        if(down())
+        {
+            repaintTetra();
+            if(playTetra.getLowest() < tetraLowest)
+            {
+                lockDownTracker = 0;
+                inLockDown = false;
+                shouldLock = false;
+                lockTimer.stop();
+            }
+            else
+            {
+                if(shouldLock)
+                {
+                    if(down())
+                    {
+                        up();
+                    }
+                    else
+                    {
+                        lock();
+                    }
+                }
+            }
+        }
+        else
+        {
+            inLockDown = true;
+            lockTimer.restart();
+        }  
+    }
+    
+    protected int calcFallDelay()
+    {
+        double delay;
+        
+        delay = scorecard.getLevel() - 1;
+        delay *= .007;
+        delay = .8 - delay;
+        delay = Math.pow(delay, scorecard.getLevel() - 1);
+        delay *= 1000;
+        
+        return (int)delay;
     }
     
     protected boolean hold()
@@ -270,7 +351,30 @@ public class GameManager extends JPanel implements KeyListener{
         return true;
     }
     
-    protected boolean lock()
+    protected void trackPlacement()
+    {
+        if(inLockDown)
+        {
+            lockDownTracker++;
+            switch(op.placement)
+            {
+                case CLASSIC:
+                    break;
+                case EXTENDED:
+                    if(lockDownTracker < 15)
+                    {
+                        lockTimer.restart();
+                    }
+                    break;
+                case INFINITE:
+                    lockTimer.restart();
+                    break;
+            }
+        }
+    }
+    
+    //returns lowest Y-value of playTetra
+    protected void lock()
     {
         for(Chunk c : playTetra.getChunkArray())
         {
@@ -279,9 +383,16 @@ public class GameManager extends JPanel implements KeyListener{
         
         clearCheck();
         
-        initTetra();
         hasHeld = false;
-        return true;
+        
+        if(playTetra.getCurrentLow() >= op.skyline)
+        {
+            gameOver();
+        }
+        else
+        {
+            initTetra();
+        }
     }
     
     protected int clearCheck()
@@ -328,7 +439,6 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected void clearLine(int line)
     {
-        System.out.println("clearing line " + line);
         for(int y = line; y < board.getGridHeight(); y++)
         {
             for(int x = 0; x < board.getGridWidth(); x++)
@@ -352,62 +462,87 @@ public class GameManager extends JPanel implements KeyListener{
         if(key == bind.left)
         {
             left();
+            trackPlacement();
             repaintTetra();
-            keyPressHeld[0] = true;
+            keyHold.left = true;
         }
         else if(key == bind.right)
         {
             right();
+            trackPlacement();
             repaintTetra();
-            keyPressHeld[1] = true;
+            keyHold.right = true;
         }
         else if(key == bind.softFall)
         {
-            down();
-            repaintTetra();
-            keyPressHeld[2] = true;
+            if(!keyHold.softFall)
+            {
+                keyHold.softFall = true;
+                
+                fallTimer.setDelay(fallTimer.getDelay()/20);
+                
+                fallTimer.restart();
+            }
         }
         else if(key == bind.hardFall)
         {
-            if(!keyPressHeld[3])
+            if(!keyHold.hardFall)
             {
                 hardFall();
                 lock();
                 repaintTetra();
-                keyPressHeld[3] = true;
+                keyHold.hardFall = true;
             }
         }
         else if(key == bind.rotClock)
         {
-            if(RotationHandler.rotationSafe(board, playTetra, true))
+            if(!keyHold.rotClock)
             {
-                playTetra.rotateClockwise();
-                repaintTetra();
+                if(RotationHandler.rotationSafe(board, playTetra, true))
+                {
+                    playTetra.rotateClockwise();
+                    trackPlacement();
+                    repaintTetra();
+                }
+                keyHold.rotClock = true;
             }
-            keyPressHeld[4] = true;
         }
         else if(key == bind.rotCounter)
         {
-            if(RotationHandler.rotationSafe(board, playTetra, false))
+            if(!keyHold.rotCounter)
             {
-                playTetra.rotateCounterClockwise();
-                repaintTetra();
+                if(RotationHandler.rotationSafe(board, playTetra, false))
+                {
+                    playTetra.rotateCounterClockwise();
+                    trackPlacement();
+                    repaintTetra();
+                }
+                keyHold.rotCounter = true;
             }
-            keyPressHeld[5] = true;
         }
         else if(key == bind.hold)
         {
-            if(op.holdBox)
-                hold();
-            keyPressHeld[6] = true;
+            if(!keyHold.hold)
+            {
+                if(op.holdBox)
+                    hold();
+                keyHold.hold = true;
+            }
         }
         else if(key == bind.pause)
         {
-            
+            if(!keyHold.pause)
+            {
+                keyHold.pause = true;
+            }
         }
         else if(key == bind.debugToggle)
         {
-            toggleDebug();
+            if(!keyHold.debugToggle)
+            {
+                toggleDebug();
+                keyHold.debugToggle = true;
+            }
         }
     }
     
@@ -416,41 +551,111 @@ public class GameManager extends JPanel implements KeyListener{
         
         if(key == bind.endGame)
         {
-            gameOver = true;
-            keyPressHeld[7] = true;
+            if(!keyHold.endGame)
+            {
+                gameOver();
+                keyHold.endGame = true;
+            }
+            
         }
-        
-        // debug commands
         else if(key == bind.lock)
         {
-            lock();
-            keyPressHeld[8] = true;
+            if(!keyHold.lock)
+            {
+                lock();
+                keyHold.lock = true;
+            }
+            
         }
         else if(key == bind.up)
         {
             up();
             repaintTetra();
-            keyPressHeld[9] = true;
+            keyHold.up = true;
         }
         else if(key == bind.clearBoard)
         {
             board.clearAllChunks();
             board.repaint();
             repaintTetra();
-            keyPressHeld[10] = true;
+            keyHold.clearBoard = true;
         }
         else
         {
             processKey(key);
         }
-        
-        
-        //debugInfo();
+    }
+    
+    public void processRelease(int key)
+    {
+        if(key == bind.left)
+        {
+            keyHold.left = false;
+        }
+        else if(key == bind.right)
+        {
+            keyHold.right = false;
+        }
+        else if(key == bind.softFall)
+        {
+            fallTimer.setDelay(calcFallDelay());
+            
+            keyHold.softFall = false;
+        }
+        else if(key == bind.hardFall)
+        {
+            keyHold.hardFall = false;
+        }
+        else if(key == bind.rotClock)
+        {
+            keyHold.rotClock = false;
+        }
+        else if(key == bind.rotCounter)
+        {
+            keyHold.rotCounter = false;
+        }
+        else if(key == bind.hold)
+        {
+            keyHold.hold = false;
+        }
+        else if(key == bind.pause)
+        {
+            keyHold.pause = false;
+        }
+        else if(key == bind.debugToggle)
+        {
+            keyHold.debugToggle = false;
+        }
+        else if(key == bind.endGame)
+        {
+            keyHold.endGame = false;
+        }
+        else if(key == bind.lock)
+        {
+            keyHold.lock = false;
+        }
+        else if(key == bind.up)
+        {
+            keyHold.up = false;
+        }
+        else if(key == bind.clearBoard)
+        {
+            keyHold.clearBoard = false;
+        }
     }
     
     protected void toggleDebug()
     {
         op.debugMode = !op.debugMode;
+        
+        if(op.debugMode)
+        {
+            fallTimer.stop();
+        }
+        else
+        {
+            fallTimer.start();
+        }
     }
 
     @Override
@@ -472,10 +677,36 @@ public class GameManager extends JPanel implements KeyListener{
     @Override
     public void keyReleased(KeyEvent ke) 
     {
-        // I feel like this is definitely not the solution that
-        // we want because it sets the entire array to false again, but
-        // after playing around a bit it seems to work exactly like it
-        // should if it was correct... see function up() - hardFall
-        Arrays.fill(keyPressHeld, false);
+        processRelease(ke.getKeyCode());
+    }
+    
+    protected class KeyHold
+    {
+        //play keys
+        public boolean left, right, softFall, hardFall,
+                rotClock, rotCounter, hold, pause;
+        
+        //debug keys
+        public boolean debugToggle, endGame,
+                lock, up, clearBoard;
+        
+        public KeyHold()
+        {
+            left = right = softFall = hardFall = rotClock = rotCounter = 
+                    hold = pause = debugToggle = endGame = lock = up =
+                    clearBoard = false;
+        }
+        
+        public void clearAll()
+        {
+            setAll(false);
+        }
+        
+        public void setAll(boolean b)
+        {
+            left = right = softFall = hardFall = rotClock = rotCounter = 
+                    hold = pause = debugToggle = endGame = lock = up =
+                    clearBoard = b;
+        }
     }
 }
