@@ -474,6 +474,8 @@ public class GameManager extends JPanel implements KeyListener{
                 keyHold.softFall = true;
                 
                 fallTimer.setDelay(fallTimer.getDelay()/20);
+                
+                fallTimer.restart();
             }
         }
         else if(key == bind.hardFall)
