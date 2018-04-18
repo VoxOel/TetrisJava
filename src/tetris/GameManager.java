@@ -88,14 +88,7 @@ public class GameManager extends JPanel implements KeyListener{
                 }
                 else
                 {
-                    if(lock() >= op.skyline)
-                    {
-                        gameOver();
-                    }
-                    else
-                    {
-                        initTetra();
-                    }
+                    lock();
                 }  
             }
         });
@@ -160,6 +153,12 @@ public class GameManager extends JPanel implements KeyListener{
         fallTimer.setDelay(calcFallDelay());
         
         fallTimer.restart();
+        
+        for( Chunk ch : playTetra.getChunkArray())
+        {
+            if(board.isSolidChunk(ch, 0, 0))
+                gameOver();
+        }
         
         repaintTetra();
     }
@@ -375,7 +374,7 @@ public class GameManager extends JPanel implements KeyListener{
     }
     
     //returns lowest Y-value of playTetra
-    protected int lock()
+    protected void lock()
     {
         for(Chunk c : playTetra.getChunkArray())
         {
@@ -386,7 +385,14 @@ public class GameManager extends JPanel implements KeyListener{
         
         hasHeld = false;
         
-        return playTetra.getCurrentLow();
+        if(playTetra.getCurrentLow() >= op.skyline)
+        {
+            gameOver();
+        }
+        else
+        {
+            initTetra();
+        }
     }
     
     protected int clearCheck()
