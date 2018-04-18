@@ -2,6 +2,8 @@ package tetris;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
@@ -22,8 +24,6 @@ public class GameManager extends JPanel implements KeyListener{
     protected GameOptions op;
     protected KeyBinding bind;
     
-    protected JPanel leftGUI, rightGUI;
-    
     protected KeyHold keyHold;
     
     protected boolean hasHeld;  // keeps track if the player is able to hold
@@ -43,7 +43,7 @@ public class GameManager extends JPanel implements KeyListener{
     
     public GameManager(GameOptions optionSettings, KeyBinding keyBindSettings)
     {
-        super(new BorderLayout(10,10));
+        super(new GridBagLayout());
         
         // Game Setup Variables
         op = optionSettings;
@@ -55,22 +55,41 @@ public class GameManager extends JPanel implements KeyListener{
         nextQueue = new NextQueue(op.showNext);
         holdBox = new HoldBox();
         
-        leftGUI = new JPanel( new BorderLayout(5,5));
-        rightGUI = new JPanel( new BorderLayout(5,5));
+        GridBagConstraints constr = new GridBagConstraints();
+
+        constr.fill = GridBagConstraints.BOTH;
         
-        leftGUI.add(holdBox, BorderLayout.NORTH);
         
-        rightGUI.add(nextQueue, BorderLayout.NORTH);
-        rightGUI.add(scorecard, BorderLayout.SOUTH);
+        constr.gridx = 0;
+        constr.gridy = 0;
+        constr.weightx = 0.3;
+        constr.weighty = 1.0;
+        constr.gridheight = 1;
+        add(holdBox,constr);
+
+        constr.gridx = 1;
+        constr.gridy = 0;
+        constr.weightx = 0.35;
+        constr.weighty = 1.0;
+        constr.gridheight = 3;
+        add(board,constr);
         
-        add(leftGUI, BorderLayout.WEST);
-        add(rightGUI, BorderLayout.EAST);
-        add(board, BorderLayout.CENTER);
+        constr.gridx = 2;
+        constr.gridy = 0;
+        constr.weightx = 0.35;
+        constr.weighty = 0.6;
+        constr.gridheight = 2;
+        add(nextQueue,constr);
+        
+        constr.gridx = 2;
+        constr.gridy = 2;
+        constr.weightx = 0.35;
+        constr.weighty = 0.4;
+        constr.gridheight = 1;
+        add(scorecard,constr);
         
         board.setBackground(Color.BLACK);
-        leftGUI.setBackground(Color.yellow);
-        rightGUI.setBackground(Color.green);
-        holdBox.setBackground(Color.PINK);
+        holdBox.setBackground(Color.GREEN);
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
         
@@ -78,6 +97,7 @@ public class GameManager extends JPanel implements KeyListener{
         hasHeld = false;
         keyHold = new KeyHold();
         
+        //timer set-up
         lockTimer = new Timer(500, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {

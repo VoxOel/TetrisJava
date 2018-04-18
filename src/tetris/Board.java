@@ -40,7 +40,8 @@ public class Board extends JPanel {
         int borderNativeHeight = border.getImage().getHeight(null);
         
         int scale = 1;
-        while(borderNativeHeight*(scale+1) <= getHeight())
+        while(borderNativeHeight*(scale+1) <= getHeight() &&
+                borderNativeWidth*(scale+1) <= getWidth() )
             scale++;
 
         int borderDrawHeight = borderNativeHeight * scale;
