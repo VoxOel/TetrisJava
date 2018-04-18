@@ -3,7 +3,6 @@ package tetris;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.Image;
@@ -99,13 +98,13 @@ public class GameManager extends JPanel implements KeyListener{
         add(dispGuide, BorderLayout.CENTER);
         
         /*
-        setBackground(Color.YELLOW);
+        
         board.setBackground(Color.BLACK);
         holdBox.setBackground(Color.GREEN);
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
         */
-        
+        setBackground(Color.YELLOW);
         board.setOpaque(false);
         holdBox.setOpaque(false);
         nextQueue.setOpaque(false);
@@ -658,6 +657,12 @@ public class GameManager extends JPanel implements KeyListener{
             up();
             repaintTetra();
             keyHold.up = true;
+        }
+        else if(key == bind.softFall)
+        {
+            down();
+            repaintTetra();
+            keyHold.softFall = true;
         }
         else if(key == bind.clearBoard)
         {

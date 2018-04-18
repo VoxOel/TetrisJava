@@ -3,6 +3,7 @@ package tetris;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
+import java.io.IOException;
 import javax.swing.ImageIcon;
 import javax.swing.JPanel;
 
@@ -59,20 +60,40 @@ public class Board extends JPanel {
         int minoBaseX = borderDrawX + minoDrawWidth/2;
         int minoBaseY = borderDrawY + borderDrawHeight - 3*minoDrawHeight/2;
         
+        
+        
         //draw chunks
         for(int x = 0; x < width; x++ )
         {
-            for(int y = 0; y < height; y++)
+            for(int y = 0; y < height/2 + 1; y++)
             {
-                if(getChunkVisibility(x,y))
+                if(getChunkVisibility(x,y) && y < height/2)
                 {
                     g2d.drawImage(chunkGrid[x][y].getImage(),
                            minoBaseX + minoDrawWidth*x,
                            minoBaseY - minoDrawHeight*y,
                            minoDrawWidth, minoDrawHeight, null);
                 }
+                
+                if(getChunkVisibility(x,y) && y == height/2)
+                {
+                    try{
+                    g2d.drawImage(
+                           chunkGrid[x][y].getBufferedImage().getSubimage(
+                                   0, minoNativeHeight/2, 
+                                   minoNativeWidth,minoNativeHeight/2
+                           ),
+                           minoBaseX + minoDrawWidth*x,
+                           minoBaseY - minoDrawHeight*y + minoDrawHeight/2,
+                           minoDrawWidth, minoDrawHeight/2, null);
+                    } catch (IOException e)
+                    {
+                        System.err.println(e.getMessage());
+                    }
+                }
             }
         }
+        
         
         //draw border
         g2d.drawImage(border.getImage(),
