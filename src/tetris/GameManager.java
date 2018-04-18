@@ -34,6 +34,9 @@ public class GameManager extends JPanel implements KeyListener{
     protected boolean inLockDown, shouldLock;
     protected int lockDownTracker;
     
+    //sound
+    SoundHandler bgm;
+    
     
     
     public GameManager()
@@ -93,6 +96,10 @@ public class GameManager extends JPanel implements KeyListener{
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
         
+        //sound
+        bgm = new SoundHandler("/tetris/audio/themeA.wav");
+        bgm.setLoop(true);
+        
         // Environment Variables
         hasHeld = false;
         keyHold = new KeyHold();
@@ -130,6 +137,7 @@ public class GameManager extends JPanel implements KeyListener{
     { 
         initTetra('0');
         fallTimer.start();
+        bgm.start();
     }
     
     public void gameOver()
