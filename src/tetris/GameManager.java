@@ -31,6 +31,8 @@ public class GameManager extends JPanel implements KeyListener{
                                 // this back to false
     
     protected Timer fallTimer, lockTimer;
+    protected boolean inLockDown, shouldLock;
+    protected int lockDownTracker;
     
     
     
@@ -65,7 +67,7 @@ public class GameManager extends JPanel implements KeyListener{
         add(rightGUI, BorderLayout.EAST);
         add(board, BorderLayout.CENTER);
         
-        board.setBackground(Color.BLUE);
+        board.setBackground(Color.BLACK);
         leftGUI.setBackground(Color.yellow);
         rightGUI.setBackground(Color.green);
         holdBox.setBackground(Color.PINK);
@@ -79,14 +81,28 @@ public class GameManager extends JPanel implements KeyListener{
         lockTimer = new Timer(500, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) {
-                if(!lock())
+                if(down())
                 {
-                    gameOver();
+                    up();
+                    shouldLock = true;
                 }
+                else
+                {
+                    if(lock() >= op.skyline)
+                    {
+                        gameOver();
+                    }
+                    else
+                    {
+                        initTetra();
+                    }
+                }  
             }
         });
         
         lockTimer.setRepeats(false);
+        inLockDown = false;
+        lockDownTracker = 0;
         
         fallTimer = new Timer(0, new ActionListener() {
             @Override
@@ -210,23 +226,34 @@ public class GameManager extends JPanel implements KeyListener{
     {
         if(down())
         {
-            lockTimer.stop();
-        }
-        else
-        {
+            repaintTetra();
             if(playTetra.getLowest() < tetraLowest)
             {
-                tetraLowest = playTetra.getLowest();
-                lockTimer.restart();
+                lockDownTracker = 0;
+                inLockDown = false;
+                shouldLock = false;
+                lockTimer.stop();
             }
             else
             {
-                lockTimer.start();
+                if(shouldLock)
+                {
+                    if(down())
+                    {
+                        up();
+                    }
+                    else
+                    {
+                        lock();
+                    }
+                }
             }
-            
         }
-        
-        repaintTetra();
+        else
+        {
+            inLockDown = true;
+            lockTimer.restart();
+        }  
     }
     
     protected int calcFallDelay()
@@ -325,7 +352,30 @@ public class GameManager extends JPanel implements KeyListener{
         return true;
     }
     
-    protected boolean lock()
+    protected void trackPlacement()
+    {
+        if(inLockDown)
+        {
+            lockDownTracker++;
+            switch(op.placement)
+            {
+                case CLASSIC:
+                    break;
+                case EXTENDED:
+                    if(lockDownTracker < 15)
+                    {
+                        lockTimer.restart();
+                    }
+                    break;
+                case INFINITE:
+                    lockTimer.restart();
+                    break;
+            }
+        }
+    }
+    
+    //returns lowest Y-value of playTetra
+    protected int lock()
     {
         for(Chunk c : playTetra.getChunkArray())
         {
@@ -334,9 +384,9 @@ public class GameManager extends JPanel implements KeyListener{
         
         clearCheck();
         
-        initTetra();
         hasHeld = false;
-        return true;
+        
+        return playTetra.getCurrentLow();
     }
     
     protected int clearCheck()
@@ -406,12 +456,14 @@ public class GameManager extends JPanel implements KeyListener{
         if(key == bind.left)
         {
             left();
+            trackPlacement();
             repaintTetra();
             keyHold.left = true;
         }
         else if(key == bind.right)
         {
             right();
+            trackPlacement();
             repaintTetra();
             keyHold.right = true;
         }
@@ -441,6 +493,7 @@ public class GameManager extends JPanel implements KeyListener{
                 if(RotationHandler.rotationSafe(board, playTetra, true))
                 {
                     playTetra.rotateClockwise();
+                    trackPlacement();
                     repaintTetra();
                 }
                 keyHold.rotClock = true;
@@ -453,6 +506,7 @@ public class GameManager extends JPanel implements KeyListener{
                 if(RotationHandler.rotationSafe(board, playTetra, false))
                 {
                     playTetra.rotateCounterClockwise();
+                    trackPlacement();
                     repaintTetra();
                 }
                 keyHold.rotCounter = true;
