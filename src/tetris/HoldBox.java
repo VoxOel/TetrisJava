@@ -37,6 +37,28 @@ public class HoldBox extends JPanel{
         g2d.drawImage(holdBox.getImage(),
                 drawX, drawY, drawWidth, drawHeight, null);
         
+        String color;
+        switch(hold)
+        {
+            case 'i': color = "cyan"; break;
+            case 'o': color =  "yellow"; break;
+            case 't': color =  "purple"; break;
+            case 's': color =  "green"; break;
+            case 'z': color =  "red"; break;
+            case 'j': color =  "blue"; break;
+            case 'l': color =  "orange"; break;
+            default : color =  "0"; break;
+        }
+        
+        if(!color.equals("0"))
+        {
+            ImageIcon tetra = new ImageIcon(
+                getClass().getResource("/tetris/textures/" + 
+                        color + "Tetra.png"));
+            
+            g2d.drawImage(tetra.getImage(),
+                drawX, drawY, drawWidth, drawHeight, null);
+        }
         
     }
     
@@ -46,15 +68,18 @@ public class HoldBox extends JPanel{
     }
 
     public char swap(char c) {
+        char ret = hold;
         if(hold != '0') {
-            char ret = hold;
             hold = c;
-            return ret;
+            
         }
-        else {
+        else 
+        {
             hold = c;
-            return '0';
+            ret = '0';
         }
+        repaint();
+        return ret;
     }
 	
 }

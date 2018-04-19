@@ -98,13 +98,14 @@ public class GameManager extends JPanel implements KeyListener{
         add(dispGuide, BorderLayout.CENTER);
         
         /*
-        
+        setBackground(Color.YELLOW);
         board.setBackground(Color.BLACK);
         holdBox.setBackground(Color.GREEN);
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
         */
-        setBackground(Color.YELLOW);
+        
+        dispGuide.setOpaque(false);
         board.setOpaque(false);
         holdBox.setOpaque(false);
         nextQueue.setOpaque(false);
