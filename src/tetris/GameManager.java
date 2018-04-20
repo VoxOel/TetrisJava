@@ -83,8 +83,8 @@ public class GameManager extends JPanel implements KeyListener{
         
         constr.gridx = 2;
         constr.gridy = 0;
-        constr.weightx = 0.6;
-        constr.weighty = 0.6;
+        constr.weightx = 0.5;
+        constr.weighty = 0.5;
         constr.gridheight = 3;
         dispGuide.add(nextQueue,constr);
         
@@ -98,13 +98,13 @@ public class GameManager extends JPanel implements KeyListener{
         add(dispGuide, BorderLayout.CENTER);
         
         /*
-        setBackground(Color.YELLOW);
+        
         board.setBackground(Color.BLACK);
         holdBox.setBackground(Color.GREEN);
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
         */
-        
+        setBackground(Color.BLACK);
         dispGuide.setOpaque(false);
         board.setOpaque(false);
         holdBox.setOpaque(false);

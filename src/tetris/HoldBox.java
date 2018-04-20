@@ -32,7 +32,7 @@ public class HoldBox extends JPanel{
         int drawWidth = nativeWidth * scale;
         
         int drawX = getWidth() - drawWidth;
-        int drawY = getHeight()/10;
+        int drawY = getHeight()/20;
         
         g2d.drawImage(holdBox.getImage(),
                 drawX, drawY, drawWidth, drawHeight, null);
@@ -61,11 +61,15 @@ public class HoldBox extends JPanel{
         }
         
         GameFont gf = new GameFont("hold");
-        drawX = 
         
-        //g2d.drawImage(gf.getImage(), , 0,  null);
+        int fontDrawWidth = gf.getImage().getWidth() * scale;
+        int fontDrawHeight = gf.getImage().getHeight() * scale;
         
+        drawX = drawX + drawWidth/2 - fontDrawWidth/2;
+        drawY = drawY + drawHeight - drawHeight/10 - fontDrawHeight;
         
+        g2d.drawImage(gf.getImage(), drawX, drawY, 
+                fontDrawWidth, fontDrawHeight,  null);
         
     }
     

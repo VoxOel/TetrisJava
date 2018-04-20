@@ -53,6 +53,10 @@ public class NextQueue extends JPanel{
                     "/tetris/textures/nextBox.png"));
             BufferedImage nextQueue = ImageIO.read(getClass().getResource(
                     "/tetris/textures/queueBox.png"));
+            BufferedImage nextQueueLeft = ImageIO.read(getClass().getResource(
+                    "/tetris/textures/queueBoxLeft.png"));
+            BufferedImage nextQueueRight = ImageIO.read(getClass().getResource(
+                    "/tetris/textures/queueBoxRight.png"));
             
             BufferedImage[] tetraQueue = new BufferedImage[7];
             ListIterator<Character> it = list.listIterator();
@@ -109,27 +113,53 @@ public class NextQueue extends JPanel{
             int drawWidth = nativeWidth * scale;
         
             int drawX = 0;
-            int drawY = getHeight()/10;
+            int drawY = getHeight()/30;
             
             g2d.drawImage(next,
                 drawX, drawY, drawWidth, drawHeight, null);
             g2d.drawImage(tetraQueue[0],
                 drawX, drawY, drawWidth, drawHeight, null);
             
-            drawY += drawHeight;
+            GameFont gf = new GameFont("next");
+        
+            int fontDrawWidth = gf.getImage().getWidth() * scale;
+            int fontDrawHeight = gf.getImage().getHeight() * scale;
+        
+            drawX = drawX + drawWidth/2 - fontDrawWidth/2;
+            drawY = drawY + drawHeight - drawHeight/10 - fontDrawHeight;
+        
+            g2d.drawImage(gf.getImage(), drawX, drawY, 
+                fontDrawWidth, fontDrawHeight,  null);
+            
+            
+            drawY = getHeight()/30 + drawHeight;
             
             drawHeight = nextQueue.getHeight() * scale;
             drawWidth = nextQueue.getWidth() * scale;
             
-            for(int i = 0; i < showNum; i++)
+            for(int i = 0; i < showNum - 1; i++)
             {
                 if(i % 2 == 0)
                     drawX = 0;
                 else
                     drawX = drawWidth;
                 
-                g2d.drawImage(nextQueue,
-                    drawX, drawY, drawWidth, drawHeight, null);
+                if(i == 0)
+                {
+                    g2d.drawImage(nextQueue,
+                        drawX, drawY, drawWidth, drawHeight, null);
+                }
+                else if(i % 2 == 0)
+                {
+                    g2d.drawImage(nextQueueLeft,
+                        drawX, drawY, drawWidth, drawHeight, null);
+                }
+                else
+                {
+                    g2d.drawImage(nextQueueRight,
+                        drawX, drawY, drawWidth, drawHeight, null);
+                }
+                    
                 g2d.drawImage(tetraQueue[i+1],
                     drawX, drawY, drawWidth, drawHeight, null);
                 
