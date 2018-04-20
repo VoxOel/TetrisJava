@@ -243,7 +243,10 @@ public class GameManager extends JPanel implements KeyListener{
         for( Chunk ch : playTetra.getChunkArray())
         {
             if(board.isSolidChunk(ch, 0, 0))
+            {
                 gameOver();
+                lock();
+            }
         }
         
         repaintTetra();

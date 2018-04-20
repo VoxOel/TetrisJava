@@ -60,6 +60,13 @@ public class HoldBox extends JPanel{
                 drawX, drawY, drawWidth, drawHeight, null);
         }
         
+        GameFont gf = new GameFont("hold");
+        drawX = 
+        
+        //g2d.drawImage(gf.getImage(), , 0,  null);
+        
+        
+        
     }
     
     public char getHold()
