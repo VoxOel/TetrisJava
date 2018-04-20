@@ -70,7 +70,7 @@ public class GameManager extends JPanel implements KeyListener{
         constr.gridx = 0;
         constr.gridy = 0;
         constr.weightx = 0.5;
-        constr.weighty = 1.0;
+        constr.weighty = .5;
         constr.gridheight = 1;
         dispGuide.add(holdBox,constr);
 
@@ -88,9 +88,9 @@ public class GameManager extends JPanel implements KeyListener{
         constr.gridheight = 3;
         dispGuide.add(nextQueue,constr);
         
-        constr.gridx = 2;
-        constr.gridy = 2;
-        constr.weightx = 0.35;
+        constr.gridx = 0;
+        constr.gridy = 1;
+        constr.weightx = .5;
         constr.weighty = 0.4;
         constr.gridheight = 1;
         dispGuide.add(scorecard,constr);
