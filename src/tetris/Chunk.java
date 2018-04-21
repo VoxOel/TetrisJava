@@ -1,6 +1,9 @@
 package tetris;
 
 import java.awt.Image;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 public class Chunk {
@@ -112,5 +115,11 @@ public class Chunk {
         return getImageIcon().getImage();
     }
     
+    public BufferedImage getBufferedImage() throws IOException
+    {
+        BufferedImage buf;
+        buf = ImageIO.read(getClass().getResource("/tetris/textures/" + color + ".png"));
+        return buf; 
+    }
     
 }
