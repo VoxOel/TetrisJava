@@ -58,8 +58,8 @@ public class GameManager extends JPanel implements KeyListener{
         
         //display and UI variables and setup
         dispGuide = new JPanel(new GridBagLayout());
-        board = new Board(op.boardWidth,op.skyline*2);
-        scorecard = new Scorecard();
+        board = new Board(op.boardWidth, op.skyline*2);
+        scorecard = new Scorecard(0, op.startingLevel, 15, true);
         nextQueue = new NextQueue(op.showNext);
         holdBox = new HoldBox();
         
@@ -104,7 +104,7 @@ public class GameManager extends JPanel implements KeyListener{
         nextQueue.setBackground(Color.RED);
         scorecard.setBackground(Color.cyan);
         */
-        setBackground(Color.BLACK);
+        setBackground(Color.DARK_GRAY);
         dispGuide.setOpaque(false);
         board.setOpaque(false);
         holdBox.setOpaque(false);
@@ -238,7 +238,8 @@ public class GameManager extends JPanel implements KeyListener{
         
         fallTimer.setDelay(calcFallDelay());
         
-        fallTimer.restart();
+        if(!op.debugMode)
+            fallTimer.restart();
         
         for( Chunk ch : playTetra.getChunkArray())
         {
@@ -339,8 +340,10 @@ public class GameManager extends JPanel implements KeyListener{
         }
         else
         {
+            if(!inLockDown)
+                lockTimer.restart();
             inLockDown = true;
-            lockTimer.restart();
+            
         }  
     }
     
@@ -500,7 +503,9 @@ public class GameManager extends JPanel implements KeyListener{
             }
         }
         
-        //TODO: scoring stuff
+        //TODO: t-spin
+        scorecard.lineScore(lines);
+        scorecard.repaint();
         
         //clear lines
         for(int i = linesCleared.length - 1; i >= 0; i--)

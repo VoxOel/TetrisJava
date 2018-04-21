@@ -3,13 +3,16 @@ package tetris;
 public class GameOptions {
     public enum PlacementType { CLASSIC, EXTENDED, INFINITE }
     
+    public boolean debugMode;
+    
     public boolean ghostTetra;
     public PlacementType placement;
     public int showNext;
-    public int skyline, boardWidth;
     public boolean superRotation;
     public boolean holdBox;
-    public boolean debugMode;
+    
+    public int skyline, boardWidth;
+    public int startingLevel;
     
     public GameOptions()
     {
@@ -18,7 +21,7 @@ public class GameOptions {
         //in-play options
         //these can be changed during play
         ghostTetra = true;
-        placement = PlacementType.INFINITE;
+        placement = PlacementType.EXTENDED;
         superRotation = false;
         showNext = 6;
         holdBox = true;
@@ -27,6 +30,7 @@ public class GameOptions {
         //these have to be changed before a game is started
         boardWidth = 10;
         skyline = 20;
+        startingLevel = 1;
         
         
     }

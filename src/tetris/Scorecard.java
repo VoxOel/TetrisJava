@@ -11,26 +11,23 @@ public class Scorecard extends JPanel{
 
     private int score;
     private int level;
+    private int levelLimit;
     private int linesCleared;
-    private int singles, doubles, triples;
-    private int tetrises, tSpins;
+    private boolean backtoback;
+    private boolean fixedLeveling;
 
     /* constructors */
     Scorecard() {
-        score = 0;
-        level = 1;
-        linesCleared = 0;
-        singles = 0;        //  TODO:
-        doubles = 0;        //      these 5 need
-        triples = 0;        //      getters and
-        tetrises = 0;       //      setters!
-        tSpins = 0;         //
+        this(0,1,15, true);
     }
 
-    Scorecard(int newScore, int newLevel) {
+    Scorecard(int newScore, int newLevel, int limit, boolean fixed) {
         score = newScore;
         level = newLevel;
+        levelLimit = limit;
         linesCleared = 0;
+        backtoback = false;
+        fixedLeveling = true;
     }
 
     @Override
@@ -43,7 +40,7 @@ public class Scorecard extends JPanel{
             StringBuilder stringScore = new StringBuilder("" + score);
             while (stringScore.length() < 8)
             {
-                stringScore.insert(0, 0);
+                stringScore.insert(0, ' ');
             }
             if(stringScore.length() > 8)
             {
@@ -111,56 +108,101 @@ public class Scorecard extends JPanel{
     public void setScore(int newScore) {
         score = newScore;
     }
+    
+    public void lineScore(int linesCleared)
+    {
+        lineScore(linesCleared, false, false);
+    }
 
-    public void addScore(int linesCleared, boolean TSpin) {
-        /* assumes that this function will probably recieve
-         * parameters from Board or GameManager class.
-         * pseudo:
-         * if(wasTSpin) {Scorecard.addScore(linesCleared, true)}
-         */
-        switch(linesCleared) {
-            case 0: // TSpin
-                score += 400 * level;
+    public void lineScore(int lines, boolean TSpin, boolean mini) {
+        int actionTotal = 0;
+        boolean oldB2B = backtoback;
+        backtoback = false;
+        
+        switch(lines) {
+            case 0:
+                if(TSpin)
+                {
+                    if(mini)
+                        actionTotal = 100 * level;
+                    else
+                        actionTotal = 400 * level;
+                }
                 break;
             case 1: // Single
                 if(TSpin)
-                    score += 800 * level;
+                {
+                    if(mini)
+                        actionTotal = 200 * level;
+                    else
+                    {
+                        actionTotal = 800 * level;
+                    }
+                    backtoback = true;
+                }
                 else
-                    score += 100 * level;
+                    actionTotal = 100 * level;
                 break;
             case 2: // Double
                 if(TSpin)
-                    score += 1200 * level;
+                {
+                    actionTotal = 1200 * level;
+                    backtoback = true;
+                }
                 else
-                    score += 300 * level;
+                    actionTotal = 300 * level;
                 break;
             case 3: // Triple
                 if(TSpin)
-                    score += 1600 * level;
+                {
+                    actionTotal = 1600 * level;
+                    backtoback = true;
+                }
                 else
-                    score += 500 * level;
+                {
+                    actionTotal = 500 * level;
+                }
                 break;
             case 4: // Tetris!
-                score += 800 * level;
+                actionTotal = 800 * level;
+                backtoback = true;
                 break;
         }
-
+        
+        if(oldB2B && backtoback)
+        {
+            actionTotal += actionTotal/2;
+        }
+        
+        score += actionTotal;
+        
+        linesCleared += lines;
+        
+        if(fixedLeveling)
+        {
+            if(linesCleared >= level*10)
+            {
+                incrementLevel();
+            }
+        }
     }
 
     public void setLevel(int newLevel) {
         level = newLevel;
+        if(level > levelLimit)
+            level = levelLimit;
+        if (level < 1)
+            level = 1;
     }
 
     public void incrementLevel() {
         level++;
+        if(level > levelLimit)
+            level = levelLimit;
     }
 
     public void setLinesCleared(int newLinesCleared) {
         linesCleared = newLinesCleared;
-    }
-
-    public void addLinesCleared(int add) {
-        linesCleared += add;
     }
 
     /* getters */
