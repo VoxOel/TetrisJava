@@ -5,13 +5,11 @@ public abstract class Tetramino
 	
     protected Chunk[] chunkArray;
     protected char type;
-    protected int lowest;
     protected char face;
 
     public Tetramino(char c)
     {
         chunkArray = new Chunk[4];
-        lowest = 99999;
         face = 'n';
         setType(c);
     }
@@ -23,20 +21,6 @@ public abstract class Tetramino
             chunkArray[i] = new Chunk(t.chunkArray[i]);
         face = t.face;
         setType(t.type);
-    }
-
-    protected void checkLowest()
-    {
-        for(Chunk c : chunkArray)
-        {
-            if(c.getY() < lowest)
-                lowest = c.getY();
-        }
-    }
-    
-    public int getLowest()
-    {
-        return lowest;
     }
     
     public int getCurrentLow()
@@ -65,7 +49,6 @@ public abstract class Tetramino
         {
             chunkArray[i].setY(chunkArray[i].getY() - 1);
         }
-        checkLowest();
     }
 
     public void left()

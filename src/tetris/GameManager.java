@@ -23,6 +23,7 @@ public class GameManager extends JPanel implements KeyListener{
     protected NextQueue nextQueue;
     protected HoldBox holdBox;
     protected Tetramino playTetra, ghostTetra;
+    protected RotationHandler rotation;
     protected int tetraLowest;
     
     protected GameOptions op;
@@ -62,6 +63,8 @@ public class GameManager extends JPanel implements KeyListener{
         scorecard = new Scorecard(0, op.startingLevel, 15, true);
         nextQueue = new NextQueue(op.showNext);
         holdBox = new HoldBox();
+        rotation = new RotationHandler(board);
+        
         
         GridBagConstraints constr = new GridBagConstraints();
 
@@ -234,7 +237,7 @@ public class GameManager extends JPanel implements KeyListener{
             System.err.println(e.getMessage());
         }
         
-        tetraLowest = playTetra.getLowest();
+        tetraLowest = 99999;
         
         fallTimer.setDelay(calcFallDelay());
         
@@ -316,8 +319,9 @@ public class GameManager extends JPanel implements KeyListener{
         if(down())
         {
             repaintTetra();
-            if(playTetra.getLowest() < tetraLowest)
+            if(playTetra.getCurrentLow() < tetraLowest)
             {
+                tetraLowest = playTetra.getCurrentLow();
                 lockDownTracker = 0;
                 inLockDown = false;
                 shouldLock = false;
@@ -592,12 +596,10 @@ public class GameManager extends JPanel implements KeyListener{
         {
             if(!keyHold.rotClock)
             {
-                if(RotationHandler.rotationSafe(board, playTetra, true))
-                {
-                    playTetra.rotateClockwise();
-                    trackPlacement();
-                    repaintTetra();
-                }
+                rotation.clockwise(playTetra);
+                trackPlacement();
+                repaintTetra();
+
                 keyHold.rotClock = true;
             }
         }
@@ -605,12 +607,10 @@ public class GameManager extends JPanel implements KeyListener{
         {
             if(!keyHold.rotCounter)
             {
-                if(RotationHandler.rotationSafe(board, playTetra, false))
-                {
-                    playTetra.rotateCounterClockwise();
-                    trackPlacement();
-                    repaintTetra();
-                }
+                rotation.counterClockwise(playTetra);
+                trackPlacement();
+                repaintTetra();
+                    
                 keyHold.rotCounter = true;
             }
         }
