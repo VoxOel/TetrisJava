@@ -95,7 +95,19 @@ public class MenuScreen extends JPanel implements KeyListener{
             @Override
             public void actionPerformed(ActionEvent ae) 
             {
+                String lvl = startingLevel.getDisplay();
+                int level = Integer.parseInt(lvl);
                 
+                level++;
+                if(level > 15)
+                    level = 1;
+                
+                if(level < 10)
+                    startingLevel.setDisplay("0" + level);
+                else
+                    startingLevel.setDisplay("" + level);
+                
+                tetris.options.startingLevel = level;
             }
             
         });
@@ -104,7 +116,8 @@ public class MenuScreen extends JPanel implements KeyListener{
             @Override
             public void actionPerformed(ActionEvent ae) 
             {
-                
+                tetris.hideMenu();
+                tetris.showSettings();
             }
             
         });

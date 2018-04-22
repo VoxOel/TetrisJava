@@ -1,9 +1,12 @@
 package tetris;
 
 import java.awt.Graphics;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JFrame;
+import javax.swing.Timer;
 
 
 public class Tetris extends JFrame implements KeyListener{
@@ -14,10 +17,15 @@ public class Tetris extends JFrame implements KeyListener{
     private MenuScreen menu;
     private boolean menuShow;
     
-    private GameManager game;
+    private SettingsScreen settings;
+    private boolean settingsShow;
     
-    private GameOptions settings;
-    private KeyBinding bindings;
+    private GameManager game;
+    private boolean gameRunning;
+    private boolean gameShow;
+    
+    public GameOptions options;
+    public KeyBinding bindings;
     
     
     public Tetris()
@@ -29,8 +37,9 @@ public class Tetris extends JFrame implements KeyListener{
         
         title = new TitleScreen();
         menu = new MenuScreen(this);
+        settings = new SettingsScreen(this);
         
-        settings = new GameOptions();
+        options = new GameOptions();
         bindings = new KeyBinding();
     }
     
@@ -46,8 +55,41 @@ public class Tetris extends JFrame implements KeyListener{
     public boolean startGame()
     {
         game.run();
+        gameShow = true;
         setVisible(true);
+        gameRunning = true;
         return true;
+    }
+    
+    public void resumeGame()
+    {
+        add(game);
+        game.unpause();
+        
+        Timer delay = new Timer(2950, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) 
+            {
+                addKeyListener(game);
+            }
+            
+        });
+        
+        delay.setRepeats(false);
+        delay.start();
+        
+        setVisible(true);
+        repaint();
+        gameShow = true;
+    }
+    
+    public void pauseGame()
+    {
+        game.pause();
+        remove(game);
+        removeKeyListener(game);
+        gameShow = false;
+        showSettings();
     }
     
     public void showTitle()
@@ -66,16 +108,17 @@ public class Tetris extends JFrame implements KeyListener{
     public void initGame()
     {
         hideMenu();
-        setGM( new GameManager(settings, bindings) );
+        setGM(new GameManager(options, bindings) );
         startGame();
     }
     
     public void showMenu()
     {
         add(menu);
+        menu.restartScaling();
         setVisible(true);
+        repaint();
         menuShow = true;
-        
     }
     
     public void hideMenu()
@@ -83,6 +126,31 @@ public class Tetris extends JFrame implements KeyListener{
         remove(menu);
         menu.stopScaling();
         menuShow = false;
+    }
+    
+    public void showSettings()
+    {
+        add(settings);
+        settings.restartScaling();
+        setVisible(true);
+        repaint();
+        settingsShow = true;
+    }
+    
+    public void hideSettings()
+    {
+        remove(settings);
+        settings.stopScaling();
+        settingsShow = false;
+    }
+    
+    public void closeSettings()
+    {
+        hideSettings();
+        if(gameRunning)
+            resumeGame();
+        else
+            showMenu();
     }
     
     public static void main(String args[]){
@@ -103,6 +171,19 @@ public class Tetris extends JFrame implements KeyListener{
         {
             hideTitle();
             showMenu();
+        }
+        else if(ke.getKeyCode() == bindings.pause)
+        {
+            if(gameShow)
+            {
+                pauseGame();
+                showSettings();
+            }
+            else
+            {
+                closeSettings();
+                resumeGame();
+            }
         }
     }
 

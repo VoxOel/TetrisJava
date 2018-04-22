@@ -19,7 +19,7 @@ public class KeyBinding {
         rotClock = KeyEvent.VK_X;
         rotCounter = KeyEvent.VK_Z;
         hold = KeyEvent.VK_SHIFT;
-        pause = KeyEvent.VK_ESCAPE; //temporary?
+        pause = KeyEvent.VK_ESCAPE; 
         
         // debug commands
         debugToggle = KeyEvent.VK_PERIOD;

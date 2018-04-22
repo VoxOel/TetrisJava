@@ -561,6 +561,30 @@ public class GameManager extends JPanel implements KeyListener{
         }
     }
     
+    public void pause()
+    {
+        bgm.stop();
+        fallTimer.stop();
+    }
+    
+    public void unpause()
+    {
+        
+        Timer delay = new Timer(3000, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) 
+            {
+                fallTimer.start();
+                bgm.start();
+            }
+            
+        });
+        
+        delay.setRepeats(false);
+        delay.start();
+        
+    }
+    
     public void processKey(int key)
     {
         if(key == bind.left)

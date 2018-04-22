@@ -67,12 +67,14 @@ public class TitleScreen extends JPanel {
         if(blink)
         {
             GameFont f = new GameFont("press any key!");
-
+            
+            drawY += (drawHeight*161)/185;
+            
             drawHeight = f.getImage().getHeight() * scale;
             drawWidth = f.getImage().getWidth() * scale;
 
             drawX = getWidth()/2 - drawWidth/2;
-            drawY = (getHeight()*163)/185 - drawHeight/2;
+            
 
             g2d.drawImage(f.getImage(),
                     drawX, drawY, drawWidth, drawHeight, null);

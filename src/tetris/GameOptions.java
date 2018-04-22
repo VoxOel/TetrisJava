@@ -22,7 +22,6 @@ public class GameOptions {
         //these can be changed during play
         ghostTetra = true;
         placement = PlacementType.EXTENDED;
-        superRotation = false;
         showNext = 6;
         holdBox = true;
         
