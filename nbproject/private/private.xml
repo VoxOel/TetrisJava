@@ -3,17 +3,22 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/MenuButton.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/MenuScreen.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Scorecard.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Board.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/SettingsScreen.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/GameOptions.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Chunk.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Tetramino.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/GameFont.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/KeyBinding.java</file>
+            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/TitleScreen.java</file>
             <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/HoldBox.java</file>
             <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Tetris.java</file>
             <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/RotationHandler.java</file>
-            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Scorecard.java</file>
-            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Board.java</file>
             <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/SoundHandler.java</file>
-            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/GameOptions.java</file>
             <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/NextQueue.java</file>
-            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Chunk.java</file>
-            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/Tetramino.java</file>
-            <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/KeyBinding.java</file>
             <file>file:/C:/Users/Tony/Documents/College/2018_Spring/COP3252%20Java/HWX/TetrisJava/src/tetris/GameManager.java</file>
         </group>
     </open-files>

@@ -185,8 +185,16 @@ public class Scorecard extends JPanel{
                 incrementLevel();
             }
         }
+        
+        repaint();
     }
 
+    public void addScore(int amount)
+    {
+        score += amount;
+        repaint();
+    }
+    
     public void setLevel(int newLevel) {
         level = newLevel;
         if(level > levelLimit)

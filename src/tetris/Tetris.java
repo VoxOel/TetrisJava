@@ -1,5 +1,6 @@
 package tetris;
 
+import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import javax.swing.JFrame;
@@ -10,7 +11,13 @@ public class Tetris extends JFrame implements KeyListener{
     private TitleScreen title;
     private boolean titleShow;
     
+    private MenuScreen menu;
+    private boolean menuShow;
+    
     private GameManager game;
+    
+    private GameOptions settings;
+    private KeyBinding bindings;
     
     
     public Tetris()
@@ -21,6 +28,10 @@ public class Tetris extends JFrame implements KeyListener{
         setSize(800, 600);
         
         title = new TitleScreen();
+        menu = new MenuScreen(this);
+        
+        settings = new GameOptions();
+        bindings = new KeyBinding();
     }
     
     public boolean setGM(GameManager gm)
@@ -54,9 +65,24 @@ public class Tetris extends JFrame implements KeyListener{
     
     public void initGame()
     {
-        setGM( new GameManager() );
-        
+        hideMenu();
+        setGM( new GameManager(settings, bindings) );
         startGame();
+    }
+    
+    public void showMenu()
+    {
+        add(menu);
+        setVisible(true);
+        menuShow = true;
+        
+    }
+    
+    public void hideMenu()
+    {
+        remove(menu);
+        menu.stopScaling();
+        menuShow = false;
     }
     
     public static void main(String args[]){
@@ -76,7 +102,7 @@ public class Tetris extends JFrame implements KeyListener{
         if(titleShow)
         {
             hideTitle();
-            initGame();
+            showMenu();
         }
     }
 

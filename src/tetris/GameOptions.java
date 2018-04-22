@@ -28,8 +28,10 @@ public class GameOptions {
         
         //gamerule options
         //these have to be changed before a game is started
-        boardWidth = 10;
-        skyline = 20;
+        boardWidth = 10;    //DO NOT CHANGE, graphics will not reflect
+                            //TODO: implement flexible matrix graphics
+        skyline = 20;       //DO NOT CHANGE, graphics will not reflect
+        
         startingLevel = 1;
         
         

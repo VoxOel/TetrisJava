@@ -318,6 +318,10 @@ public class GameManager extends JPanel implements KeyListener{
     {
         if(down())
         {
+            if(keyHold.softFall)
+            {
+                scorecard.addScore(1);
+            }
             repaintTetra();
             if(playTetra.getCurrentLow() < tetraLowest)
             {
@@ -393,7 +397,10 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected boolean hardFall()
     {
-        while(down(playTetra)){}
+        while(down(playTetra))
+        {
+            scorecard.addScore(2);
+        }
         return true;
     }
     
@@ -509,7 +516,6 @@ public class GameManager extends JPanel implements KeyListener{
         
         //TODO: t-spin
         scorecard.lineScore(lines);
-        scorecard.repaint();
         
         //clear lines
         for(int i = linesCleared.length - 1; i >= 0; i--)
