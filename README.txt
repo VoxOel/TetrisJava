@@ -49,14 +49,22 @@ Play Settings:
 	Infinite: the player has .5 seconds to move or rotate the tetramino before
 		it locks. The player can move or rotate the tetramino indefinitely, which resets
 		the lock timer.
-	
-EXTRA FEATURES:
+		
+GRADING CHECKLIST:
+Rules implementation / gameplay -- 30%:
+- follows the 2009 Tetris Design Guideline (linked below)
+
+User interface (GUI) -- 30%
+
+Class / code design -- 30%
+
+Extra Features -- 10%:
 - Added music that plays only while game is in progress
 - The entire game minus the title screen features custom sprites and textures
 	made by Anthony
 - All of the options settings 
 - The Ghost Tetramino
-- HighScores
+- HighScore
 - Implemented Tetris Super Rotation™ (this is whenever the tetramino gets rotated
 	during certain scenarios "to provide a smoother playing experience."
 
@@ -80,7 +88,7 @@ https://github.com/VoxOel/TetrisJava/commits?author=YianniWhisler
 - Classic Rotation (framework for Super Rotation™)
 - HoldBox
 - NextQueue
-- Various parts of GameManager
+- Various parts of GameManager and other classes
 
 SOURCES:
 - 2009 Tetris Design Guideline
