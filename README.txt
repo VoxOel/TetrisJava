@@ -63,7 +63,9 @@ EXTRA FEATURES:
 WORK:
 https://github.com/VoxOel/TetrisJava
 This is only a general description most of the time was spent in pair-programming at Dirac
+
 Anthony:
+https://github.com/VoxOel/TetrisJava/commits?author=VoxOel
 - Menus
 - GUI
 - Super Rotation™
@@ -73,6 +75,7 @@ Anthony:
 - SoundHandler
 
 Yianni:
+https://github.com/VoxOel/TetrisJava/commits?author=YianniWhisler
 - Responsible for Tetramino manipulation
 - Classic Rotation (framework for Super Rotation™)
 - HoldBox
