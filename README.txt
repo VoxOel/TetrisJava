@@ -23,7 +23,7 @@ Prevents the tetramino from falling and enables extra controls that are only
 accessible in debug mode.
 
 - 'K' triggers the current game to end
-- CTRL key will lock the key in place
+- CTRL key will lock the tetramino in place
 - UP arrow key to move the tetramino up
 - BACKSPACE to clear the gameboard
 
