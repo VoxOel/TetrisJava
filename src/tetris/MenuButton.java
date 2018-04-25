@@ -186,6 +186,8 @@ public class MenuButton extends JButton{
             setRolloverIcon( new ImageIcon(scaledRollover));
             setPressedIcon( new ImageIcon(scaledSelected));
             
+            g2d.dispose();
+            
         } catch (IOException ex) {
             System.err.println(ex.getMessage());
             return false;
