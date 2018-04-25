@@ -224,6 +224,8 @@ public class GameManager extends JPanel implements KeyListener{
         fallTimer.stop();
         gameEnd = true;
         
+        tetris.removePause();
+        
         bH = 0;
         bW = 0;
         
@@ -242,6 +244,7 @@ public class GameManager extends JPanel implements KeyListener{
                     {
                         brickOut.stop();
                         tetris.endGame();
+                        bH = 0;
                     }
                 }
                 
@@ -526,7 +529,8 @@ public class GameManager extends JPanel implements KeyListener{
             board.setChunk(c.getX(), c.getY(), true, true, c.getColor());
         }
         
-        clearCheck();
+        if(!gameEnd)
+            clearCheck();
         
         hasHeld = false;
         
@@ -538,6 +542,8 @@ public class GameManager extends JPanel implements KeyListener{
         {
             initTetra();
         }
+        
+        inLockDown = false;
     }
     
     protected int clearCheck()
@@ -550,9 +556,10 @@ public class GameManager extends JPanel implements KeyListener{
         int lines = 0;
         for(int y = 0; y < 20; y++)
         {
-            if(checkLine(y))
+            if(checkLine(y) && lines < 4)
             {
-                linesCleared[lines++] = y;
+                linesCleared[lines] = y;
+                lines++;
             }
         }
         
@@ -567,6 +574,11 @@ public class GameManager extends JPanel implements KeyListener{
         }
         
         return lines;
+    }
+    
+    public int getScore()
+    {
+        return scorecard.getScore();
     }
     
     //returns true if line is filled
@@ -632,7 +644,7 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void processKey(int key)
     {
-        if(gameEnd && key != bind.pause)
+        if(gameEnd)
         {
             return;
         }

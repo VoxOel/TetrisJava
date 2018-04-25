@@ -26,6 +26,7 @@ public class Tetris extends JFrame implements KeyListener{
     
     public GameOptions options;
     public KeyBinding bindings;
+    private boolean canPause;
     
     
     public Tetris()
@@ -40,6 +41,7 @@ public class Tetris extends JFrame implements KeyListener{
         
         title = new TitleScreen();
         menu = new MenuScreen(this);
+       // scores = new ScoreScreen(this);
         settings = new SettingsScreen(this,options);
         
         
@@ -60,6 +62,7 @@ public class Tetris extends JFrame implements KeyListener{
         gameShow = true;
         setVisible(true);
         gameRunning = true;
+        canPause = true;
         return true;
     }  
     
@@ -87,9 +90,22 @@ public class Tetris extends JFrame implements KeyListener{
         gameShow = true;
     }
     
+    public void removePause()
+    {
+        canPause = false;
+    }
+    
     public void endGame()
     {
+        game.pause();
+        remove(game);
+        removeKeyListener(game);
+        gameShow = false;
+        gameRunning = false;
         
+        if(game.getScore() > menu.getHighscore())
+            menu.setHighscore(game.getScore());
+        showMenu();
     }
     
     public void pauseGame()
@@ -191,7 +207,7 @@ public class Tetris extends JFrame implements KeyListener{
             hideTitle();
             showMenu();
         }
-        else if(ke.getKeyCode() == bindings.pause)
+        else if(ke.getKeyCode() == bindings.pause && canPause)
         {
             if(gameShow)
             {
@@ -200,7 +216,7 @@ public class Tetris extends JFrame implements KeyListener{
             }
             else
             {
-                closeSettings();
+                closeSettings(); 
                 resumeGame();
             }
         }

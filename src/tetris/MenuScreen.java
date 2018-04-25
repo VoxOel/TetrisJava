@@ -24,7 +24,7 @@ public class MenuScreen extends JPanel implements KeyListener{
         super(new GridBagLayout());
         
         tetris = t;
-        highscores = new MenuButton("highscores");
+        highscores = new MenuButton("highscore", "0");
         gamemode = new MenuButton("game mode", "marathon");
         startingLevel = new MenuButton("start level", "01");
         playSettings = new MenuButton("play settings");
@@ -158,6 +158,16 @@ public class MenuScreen extends JPanel implements KeyListener{
         startingLevel.repaintButton();
         playSettings.repaintButton();
         start.repaintButton();
+    }
+    
+    public void setHighscore(int i)
+    {
+        highscores.setDisplay("" + i);
+    }
+    
+    public int getHighscore()
+    {
+        return Integer.parseInt(highscores.getDisplay());
     }
     
     @Override
