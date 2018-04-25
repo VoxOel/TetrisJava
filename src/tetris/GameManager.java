@@ -62,7 +62,7 @@ public class GameManager extends JPanel implements KeyListener{
         board = new Board(op.boardWidth, op.skyline*2);
         scorecard = new Scorecard(0, op.startingLevel, 15, true);
         nextQueue = new NextQueue(op.showNext);
-        holdBox = new HoldBox();
+        holdBox = new HoldBox(op.holdBox);
         rotation = new RotationHandler(board);
         
         
@@ -194,6 +194,16 @@ public class GameManager extends JPanel implements KeyListener{
         validate();
     }
     
+    public void toggleHoldVis()
+    {
+        holdBox.toggleVis();
+    }
+    
+    public void setQueueShow(int i)
+    {
+        nextQueue.setShow(i);
+    }
+    
     public void run()
     { 
         initTetra('0');
@@ -225,11 +235,8 @@ public class GameManager extends JPanel implements KeyListener{
         try
         {
             playTetra = charToTetra(tetra);
-            if(op.ghostTetra)
-            {
-                ghostTetra = charToTetra(tetra);
-                initGhost();
-            }
+            ghostTetra = charToTetra(tetra);
+            initGhost();
             
         }
         catch(Exception e)
@@ -569,7 +576,8 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void unpause()
     {
-        
+        placeGhost();
+        repaint();
         Timer delay = new Timer(3000, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) 
@@ -584,6 +592,8 @@ public class GameManager extends JPanel implements KeyListener{
         delay.start();
         
     }
+    
+    
     
     public void processKey(int key)
     {

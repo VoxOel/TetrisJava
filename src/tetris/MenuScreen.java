@@ -71,7 +71,6 @@ public class MenuScreen extends JPanel implements KeyListener{
         });
         
         scaleTimer.setDelay(500);
-        scaleTimer.start();
         
         highscores.addActionListener(new ActionListener(){
             @Override

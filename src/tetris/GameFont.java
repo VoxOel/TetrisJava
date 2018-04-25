@@ -112,6 +112,7 @@ public class GameFont{
             drawX += letter.getWidth();
         }
         
+        g2d.dispose();
         
     }
 }

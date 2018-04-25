@@ -6,18 +6,21 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.JPanel;
 import javax.swing.Timer;
+import tetris.GameOptions.PlacementType;
 
 public class SettingsScreen extends JPanel{
     private MenuButton ghost, placement, queueShow, holdShow, controls, back;
     private MenuButton[] buttons;
     private Tetris tetris;
     private Timer scaleTimer;
+    private GameOptions op;
     
-    public SettingsScreen(Tetris t)
+    public SettingsScreen(Tetris t, GameOptions o)
     {
         super(new GridBagLayout());
         
         tetris = t;
+        op = o;
         
         ghost = new MenuButton("show ghost", "on");
         holdShow = new MenuButton("show hold", "on");
@@ -44,14 +47,23 @@ public class SettingsScreen extends JPanel{
         {
             constr.gridx = i % 2;
             constr.gridy = i/2;
-            add(buttons[i],constr);
+            if(i != 4)
+                add(buttons[i],constr);
         }
         
         ghost.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) 
             {
-                
+                op.ghostTetra = !op.ghostTetra;
+                if(op.ghostTetra)
+                {
+                    ghost.setDisplay("on");
+                }
+                else
+                {
+                    ghost.setDisplay("off");
+                }
             }
             
         });
@@ -60,7 +72,16 @@ public class SettingsScreen extends JPanel{
             @Override
             public void actionPerformed(ActionEvent ae) 
             {
-                
+                op.holdBox = !op.holdBox;
+                if(op.holdBox)
+                {
+                    holdShow.setDisplay("on");
+                }
+                else
+                {
+                    holdShow.setDisplay("off");
+                }
+                tetris.toggleHold();
             }
             
         });
@@ -69,7 +90,16 @@ public class SettingsScreen extends JPanel{
             @Override
             public void actionPerformed(ActionEvent ae) 
             {
+                String sh = queueShow.getDisplay();
+                int num = Integer.parseInt(sh);
                 
+                num++;
+                if(num > 6)
+                    num = 1;
+                
+                queueShow.setDisplay("" +  num);
+                
+                tetris.setQueue(num);
             }
             
         });
@@ -78,7 +108,21 @@ public class SettingsScreen extends JPanel{
             @Override
             public void actionPerformed(ActionEvent ae) 
             {
-                
+                switch(op.placement)
+                {
+                    case CLASSIC:
+                        placement.setDisplay("extended");
+                        op.placement = PlacementType.EXTENDED;
+                        break;
+                    case EXTENDED:
+                        placement.setDisplay("infinite");
+                        op.placement = PlacementType.INFINITE;
+                        break;
+                    case INFINITE:
+                        placement.setDisplay("classic");
+                        op.placement = PlacementType.CLASSIC;
+                        break;
+                }
             }
             
         });
@@ -111,7 +155,6 @@ public class SettingsScreen extends JPanel{
         });
         
         scaleTimer.setDelay(500);
-        scaleTimer.start();
     }
     
     public void stopScaling()
