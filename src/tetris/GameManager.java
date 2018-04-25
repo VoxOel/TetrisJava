@@ -17,6 +17,7 @@ import javax.swing.Timer;
 
 
 public class GameManager extends JPanel implements KeyListener{
+    protected Tetris tetris;
     protected JPanel dispGuide;
     protected Board board;
     protected Scorecard scorecard;
@@ -28,6 +29,9 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected GameOptions op;
     protected KeyBinding bind;
+    protected boolean gameEnd;
+    protected Timer brickOut;
+    protected int bW, bH;
     
     protected KeyHold keyHold;
     
@@ -44,18 +48,21 @@ public class GameManager extends JPanel implements KeyListener{
     
     
     
-    public GameManager()
+    public GameManager(Tetris t)
     {
-        this(new GameOptions(), new KeyBinding());
+        this(new GameOptions(), new KeyBinding(), t);
     }
     
-    public GameManager(GameOptions optionSettings, KeyBinding keyBindSettings)
+    public GameManager(GameOptions optionSettings, KeyBinding keyBindSettings, Tetris t)
     {
         super(null);
+        
+        tetris = t;
         
         // Game Setup Variables
         op = optionSettings;
         bind = keyBindSettings;
+        gameEnd = false;
         
         //display and UI variables and setup
         dispGuide = new JPanel(new GridBagLayout());
@@ -213,8 +220,36 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void gameOver()
     {
-        //TODO make this function do stuff
         System.out.println("Game Over!");
+        fallTimer.stop();
+        gameEnd = true;
+        
+        bH = 0;
+        bW = 0;
+        
+        brickOut = new Timer(17, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) 
+            {
+                board.setChunk(bW, bH, true, true, "grey");
+                bW++;
+                if(bW == board.getGridWidth())
+                {
+                    bW = 0;
+                    bH++;
+                    
+                    if(bH > op.skyline + 2)
+                    {
+                        brickOut.stop();
+                        tetris.endGame();
+                    }
+                }
+                
+                board.repaint();
+            }
+        });
+        
+        brickOut.start();
     }
     
     public void initTetra()
@@ -597,6 +632,11 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void processKey(int key)
     {
+        if(gameEnd && key != bind.pause)
+        {
+            return;
+        }
+        
         if(key == bind.left)
         {
             left();

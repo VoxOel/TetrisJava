@@ -87,6 +87,11 @@ public class Tetris extends JFrame implements KeyListener{
         gameShow = true;
     }
     
+    public void endGame()
+    {
+        
+    }
+    
     public void pauseGame()
     {
         game.pause();
@@ -122,7 +127,7 @@ public class Tetris extends JFrame implements KeyListener{
     public void initGame()
     {
         hideMenu();
-        setGM(new GameManager(options, bindings) );
+        setGM(new GameManager(options, bindings, this) );
         startGame();
     }
     
