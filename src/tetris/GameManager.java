@@ -220,39 +220,42 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void gameOver()
     {
-        System.out.println("Game Over!");
-        fallTimer.stop();
-        gameEnd = true;
-        
-        tetris.removePause();
-        
-        bH = 0;
-        bW = 0;
-        
-        brickOut = new Timer(17, new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent ae) 
-            {
-                board.setChunk(bW, bH, true, true, "grey");
-                bW++;
-                if(bW == board.getGridWidth())
+        if(!gameEnd)
+        {
+            System.out.println("Game Over!");
+            fallTimer.stop();
+            gameEnd = true;
+
+            tetris.removePause();
+
+            bH = 0;
+            bW = 0;
+
+            brickOut = new Timer(17, new ActionListener(){
+                @Override
+                public void actionPerformed(ActionEvent ae) 
                 {
-                    bW = 0;
-                    bH++;
-                    
-                    if(bH > op.skyline + 2)
+                    board.setChunk(bW, bH, true, true, "grey");
+                    bW++;
+                    if(bW == board.getGridWidth())
                     {
-                        brickOut.stop();
-                        tetris.endGame();
-                        bH = 0;
+                        bW = 0;
+                        bH++;
+
+                        if(bH > op.skyline + 2)
+                        {
+                            brickOut.stop();
+                            tetris.endGame();
+                            bH = 0;
+                        }
                     }
+
+                    board.repaint();
                 }
-                
-                board.repaint();
-            }
-        });
-        
-        brickOut.start();
+            });
+
+            brickOut.start();
+        }
     }
     
     public void initTetra()
