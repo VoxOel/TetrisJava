@@ -22,14 +22,15 @@ public class GameOptions {
         //these can be changed during play
         ghostTetra = true;
         placement = PlacementType.EXTENDED;
-        superRotation = false;
         showNext = 6;
         holdBox = true;
         
         //gamerule options
         //these have to be changed before a game is started
-        boardWidth = 10;
-        skyline = 20;
+        boardWidth = 10;    //DO NOT CHANGE, graphics will not reflect
+                            //TODO: implement flexible matrix graphics
+        skyline = 20;       //DO NOT CHANGE, graphics will not reflect
+        
         startingLevel = 1;
         
         
