@@ -17,6 +17,7 @@ import javax.swing.Timer;
 
 
 public class GameManager extends JPanel implements KeyListener{
+    protected Tetris tetris;
     protected JPanel dispGuide;
     protected Board board;
     protected Scorecard scorecard;
@@ -28,6 +29,9 @@ public class GameManager extends JPanel implements KeyListener{
     
     protected GameOptions op;
     protected KeyBinding bind;
+    protected boolean gameEnd;
+    protected Timer brickOut;
+    protected int bW, bH;
     
     protected KeyHold keyHold;
     
@@ -44,25 +48,28 @@ public class GameManager extends JPanel implements KeyListener{
     
     
     
-    public GameManager()
+    public GameManager(Tetris t)
     {
-        this(new GameOptions(), new KeyBinding());
+        this(new GameOptions(), new KeyBinding(), t);
     }
     
-    public GameManager(GameOptions optionSettings, KeyBinding keyBindSettings)
+    public GameManager(GameOptions optionSettings, KeyBinding keyBindSettings, Tetris t)
     {
         super(null);
+        
+        tetris = t;
         
         // Game Setup Variables
         op = optionSettings;
         bind = keyBindSettings;
+        gameEnd = false;
         
         //display and UI variables and setup
         dispGuide = new JPanel(new GridBagLayout());
         board = new Board(op.boardWidth, op.skyline*2);
         scorecard = new Scorecard(0, op.startingLevel, 15, true);
         nextQueue = new NextQueue(op.showNext);
-        holdBox = new HoldBox();
+        holdBox = new HoldBox(op.holdBox);
         rotation = new RotationHandler(board);
         
         
@@ -194,6 +201,16 @@ public class GameManager extends JPanel implements KeyListener{
         validate();
     }
     
+    public void toggleHoldVis()
+    {
+        holdBox.toggleVis();
+    }
+    
+    public void setQueueShow(int i)
+    {
+        nextQueue.setShow(i);
+    }
+    
     public void run()
     { 
         initTetra('0');
@@ -203,8 +220,39 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void gameOver()
     {
-        //TODO make this function do stuff
         System.out.println("Game Over!");
+        fallTimer.stop();
+        gameEnd = true;
+        
+        tetris.removePause();
+        
+        bH = 0;
+        bW = 0;
+        
+        brickOut = new Timer(17, new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent ae) 
+            {
+                board.setChunk(bW, bH, true, true, "grey");
+                bW++;
+                if(bW == board.getGridWidth())
+                {
+                    bW = 0;
+                    bH++;
+                    
+                    if(bH > op.skyline + 2)
+                    {
+                        brickOut.stop();
+                        tetris.endGame();
+                        bH = 0;
+                    }
+                }
+                
+                board.repaint();
+            }
+        });
+        
+        brickOut.start();
     }
     
     public void initTetra()
@@ -225,11 +273,8 @@ public class GameManager extends JPanel implements KeyListener{
         try
         {
             playTetra = charToTetra(tetra);
-            if(op.ghostTetra)
-            {
-                ghostTetra = charToTetra(tetra);
-                initGhost();
-            }
+            ghostTetra = charToTetra(tetra);
+            initGhost();
             
         }
         catch(Exception e)
@@ -484,7 +529,8 @@ public class GameManager extends JPanel implements KeyListener{
             board.setChunk(c.getX(), c.getY(), true, true, c.getColor());
         }
         
-        clearCheck();
+        if(!gameEnd)
+            clearCheck();
         
         hasHeld = false;
         
@@ -496,6 +542,8 @@ public class GameManager extends JPanel implements KeyListener{
         {
             initTetra();
         }
+        
+        inLockDown = false;
     }
     
     protected int clearCheck()
@@ -508,9 +556,10 @@ public class GameManager extends JPanel implements KeyListener{
         int lines = 0;
         for(int y = 0; y < 20; y++)
         {
-            if(checkLine(y))
+            if(checkLine(y) && lines < 4)
             {
-                linesCleared[lines++] = y;
+                linesCleared[lines] = y;
+                lines++;
             }
         }
         
@@ -525,6 +574,11 @@ public class GameManager extends JPanel implements KeyListener{
         }
         
         return lines;
+    }
+    
+    public int getScore()
+    {
+        return scorecard.getScore();
     }
     
     //returns true if line is filled
@@ -569,7 +623,8 @@ public class GameManager extends JPanel implements KeyListener{
     
     public void unpause()
     {
-        
+        placeGhost();
+        repaint();
         Timer delay = new Timer(3000, new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent ae) 
@@ -585,8 +640,15 @@ public class GameManager extends JPanel implements KeyListener{
         
     }
     
+    
+    
     public void processKey(int key)
     {
+        if(gameEnd)
+        {
+            return;
+        }
+        
         if(key == bind.left)
         {
             left();
